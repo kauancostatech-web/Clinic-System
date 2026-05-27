@@ -1,0 +1,95 @@
+<header class="topo">
+  <div class="topo-conteudo">
+    <div class="marca">
+      <span class="marca-simbolo">+</span>
+      <div>
+        <strong>ClinicSystem</strong>
+        <small>Sistema hospitalar</small>
+      </div>
+    </div>
+
+    <nav>
+      <a>Pacientes</a>
+      <a>Consultas</a>
+      <a>Relatorios</a>
+    </nav>
+  </div>
+</header>
+
+<main class="pagina">
+  <section class="cabecalho">
+    <div>
+      <span class="secao">Pacientes</span>
+      <h1>Cadastro de pacientes</h1>
+      <p>Gerencie os dados principais dos pacientes do hospital.</p>
+    </div>
+
+    <div class="resumo">
+      <span>Total cadastrado</span>
+      <strong>{{ pacientes.length }}</strong>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>{{ idEditando ? 'Editar paciente' : 'Novo paciente' }}</h2>
+
+    <form class="formulario" (ngSubmit)="salvar()" #pacienteForm="ngForm">
+      <label>
+        Nome do paciente
+        <input type="text" name="nome" placeholder="Digite o nome" [(ngModel)]="nome" required>
+      </label>
+
+      <label>
+        CPF
+        <input type="text" name="cpf" placeholder="000.000.000-00" [(ngModel)]="cpf" required>
+      </label>
+
+      <label>
+        Telefone
+        <input type="text" name="telefone" placeholder="(00) 00000-0000" [(ngModel)]="telefone" required>
+      </label>
+
+      <div class="acoes-formulario">
+        <button type="submit" [disabled]="salvando || pacienteForm.invalid">
+          {{ salvando ? 'Salvando...' : (idEditando !== undefined ? 'Salvar' : 'Cadastrar') }}
+        </button>
+        <button type="button" class="secundario" *ngIf="idEditando !== undefined" (click)="cancelarEdicao()" [disabled]="salvando">Cancelar</button>
+      </div>
+    </form>
+  </section>
+
+  <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+
+  <section class="painel">
+    <div class="titulo-lista">
+      <h2>Lista de pacientes</h2>
+      <span>{{ pacientes.length }} registro(s)</span>
+    </div>
+
+    <div class="tabela-area">
+      <table>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Telefone</th>
+          <th>Acoes</th>
+        </tr>
+
+        <tr *ngFor="let paciente of pacientes">
+          <td>{{ paciente.nome }}</td>
+          <td>{{ paciente.cpf }}</td>
+          <td>{{ paciente.telefone }}</td>
+          <td class="acoes-tabela">
+            <button type="button" class="editar" (click)="editar(paciente)" [disabled]="excluindoId === paciente.id">Editar</button>
+            <button type="button" class="excluir" (click)="excluir(paciente)" [disabled]="excluindoId === paciente.id">
+              {{ excluindoId === paciente.id ? 'Excluindo...' : 'Excluir' }}
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <p class="vazio" *ngIf="carregando">Carregando pacientes...</p>
+      <p class="vazio" *ngIf="!carregando && pacientes.length === 0">Nenhum paciente cadastrado.</p>
+    </div>
+  </section>
+</main>

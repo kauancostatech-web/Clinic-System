@@ -1,0 +1,25 @@
+{
+  "pacientes": [
+    {
+      "id": 1,
+      "nome": "Ana Souza",
+      "cpf": "123.456.789-00",
+      "telefone": "(11) 99999-1111"
+    },
+    {
+      "id": 2,
+      "nome": "Carlos Lima",
+      "cpf": "987.654.321-00",
+      "telefone": "(11) 98888-2222"
+    },
+    {
+      "id": 3,
+      "nome": "Mariana Costa",
+      "cpf": "456.789.123-00",
+      "telefone": "(11) 97777-3333"
+    }
+  ],
+  "consultas": [],
+  "receitas": [],
+  "medicamentos": []
+}
