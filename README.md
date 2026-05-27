@@ -1,59 +1,110 @@
-# ClinicSystem
+# Clinic System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.26.
+Sistema web para cadastro e gerenciamento de pacientes, desenvolvido com Angular.
 
-## Development server
+O projeto faz parte de um sistema hospitalar em desenvolvimento e atualmente possui a tela de pacientes com cadastro, listagem, edicao e exclusao de registros.
 
-To start a local development server, run:
+## Objetivo
 
-```bash
-ng serve
+Facilitar o controle inicial de pacientes em uma clinica ou ambiente hospitalar, mantendo os dados principais organizados em uma interface simples e objetiva.
+
+## Funcionalidades
+
+- Cadastro de pacientes
+- Listagem de pacientes cadastrados
+- Edicao de dados do paciente
+- Exclusao de pacientes
+- Mensagens de sucesso e erro
+- Integracao com uma API local usando JSON Server
+
+## Tecnologias Utilizadas
+
+- Angular 19
+- TypeScript
+- HTML
+- CSS
+- JSON Server
+- Node.js / npm
+
+## Estrutura Principal
+
+```text
+clinic-system/
+├── backend/
+│   └── db.json
+├── src/
+│   └── app/
+│       └── pages/
+│           └── pacientes/
+├── angular.json
+├── package.json
+└── README.md
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Como Rodar o Projeto
 
-## Code scaffolding
+Antes de iniciar, instale o Node.js LTS.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Instale as dependencias:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
-
-To build the project run:
+Inicie o backend local:
 
 ```bash
-ng build
+npm run backend
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Em outro terminal, inicie o Angular:
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+Acesse no navegador:
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```text
+http://localhost:4200
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## API Local
 
-## Additional Resources
+O projeto usa o JSON Server como backend temporario.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Arquivo de dados:
+
+```text
+backend/db.json
+```
+
+Endereco da API:
+
+```text
+http://127.0.0.1:3000
+```
+
+Recurso principal:
+
+```text
+/pacientes
+```
+
+## Status do Projeto
+
+Em desenvolvimento.
+
+Modulo atual:
+
+- Pacientes
+
+Modulos planejados:
+
+- Consultas
+- Receitas
+- Medicamentos
+
+## Autor
+
+Kauan Costa
