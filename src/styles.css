@@ -13,3 +13,11 @@ button,
 input {
   font-family: inherit;
 }
+
+a {
+  color: inherit;
+}
+
+select {
+  font-family: inherit;
+}

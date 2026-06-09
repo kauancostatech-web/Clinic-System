@@ -1,25 +1,106 @@
 {
   "pacientes": [
     {
+      "nome": "nbkvkjhg",
+      "cpf": "33131414341",
+      "telefone": "11958486320",
+      "id": 1
+    }
+  ],
+  "consultas": [
+    {
+      "tipo": "Presencial",
+      "especialidadeOuMedico": "Cardiologia",
+      "local": "Unidade Centro",
+      "paciente": "kauan",
+      "pagamento": "Particular",
+      "data": "2026-06-02",
+      "horario": "12:30",
+      "status": "Agendada",
+      "id": 1
+    }
+  ],
+  "receitas": [],
+  "medicamentos": [],
+  "exames": [
+    {
       "id": 1,
-      "nome": "Ana Souza",
-      "cpf": "123.456.789-00",
-      "telefone": "(11) 99999-1111"
+      "nome": "Hemograma completo",
+      "preparo": "Jejum nao obrigatorio"
     },
     {
       "id": 2,
-      "nome": "Carlos Lima",
-      "cpf": "987.654.321-00",
-      "telefone": "(11) 98888-2222"
+      "nome": "Raio-X",
+      "preparo": "Levar documento com foto"
+    }
+  ],
+  "especialidades": [
+    {
+      "id": 1,
+      "nome": "Cardiologia"
+    },
+    {
+      "id": 2,
+      "nome": "Clinico geral"
     },
     {
       "id": 3,
-      "nome": "Mariana Costa",
-      "cpf": "456.789.123-00",
-      "telefone": "(11) 97777-3333"
+      "nome": "Ortopedia"
     }
   ],
-  "consultas": [],
-  "receitas": [],
-  "medicamentos": []
+  "medicos": [
+    {
+      "id": 1,
+      "nome": "Dra. Ana Martins",
+      "especialidade": "Cardiologia"
+    },
+    {
+      "id": 2,
+      "nome": "Dr. Carlos Lima",
+      "especialidade": "Clinico geral"
+    }
+  ],
+  "unidades": [
+    {
+      "id": 1,
+      "nome": "Unidade Centro"
+    },
+    {
+      "id": 2,
+      "nome": "Unidade Norte"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Administrador",
+      "email": "admin@clinicsystem.local",
+      "senha": "admin123",
+      "perfil": "admin"
+    },
+    {
+      "nome": "kauan",
+      "email": "kauan.tv06@gmail.com",
+      "senha": "1234",
+      "perfil": "paciente",
+      "id": 2
+    }
+  ],
+  "tokensSenha": [],
+  "tokensPagamento": [
+    {
+      "email": "kauan.tv06@gmail.com",
+      "token": "BJ2KTE",
+      "criadoEm": "2026-06-09T13:04:52.645Z",
+      "status": "gerado",
+      "id": 1
+    },
+    {
+      "email": "kauan.tv06@gmail.com",
+      "token": "ZF75FI",
+      "criadoEm": "2026-06-09T13:11:55.740Z",
+      "status": "gerado",
+      "id": 2
+    }
+  ]
 }
