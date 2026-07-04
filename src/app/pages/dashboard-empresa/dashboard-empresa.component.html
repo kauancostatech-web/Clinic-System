@@ -1,0 +1,155 @@
+<section class="company-page">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">+</div>
+      <div>
+        <strong>Clinic System</strong>
+        <span>Portal da empresa</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a routerLink="/empresa/profissionais">Profissionais</a>
+      <a routerLink="/empresa/servicos">Especialidades e serviços</a>
+      <a routerLink="/empresa/agenda">Agenda</a>
+      <a routerLink="/empresa/pacientes">Pacientes</a>
+      <a routerLink="/empresa/pagamentos">Pagamentos e faturas</a>
+      <a routerLink="/empresa/configuracoes">Configurações</a>
+    </nav>
+
+    <button type="button" class="sair" (click)="sair()">Sair do painel</button>
+  </aside>
+
+  <main class="dashboard">
+    <header class="hero" id="dashboard">
+      <div>
+        <span>Área privada para CNPJ</span>
+        <h1>Dashboard administrativo</h1>
+        <p>Olá, {{ usuarioLogado?.nome }}. Acompanhe a operação da empresa, confirme consultas, revise pagamentos e mantenha serviços e profissionais atualizados.</p>
+      </div>
+      <div class="plan-card">
+        <small>Assinatura da plataforma</small>
+        <strong>Profissional</strong>
+        <p>Mensalidade ativa · controle de agenda, pacientes e financeiro.</p>
+      </div>
+    </header>
+
+    <section class="metric-grid">
+      <article *ngFor="let item of resumo">
+        <span>{{ item.rotulo }}</span>
+        <strong>{{ item.valor }}</strong>
+        <small>{{ item.detalhe }}</small>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel" id="profissionais">
+        <div class="panel-heading">
+          <span>Cadastros</span>
+          <h2>Médicos e profissionais</h2>
+        </div>
+        <div class="module-grid">
+          <a *ngFor="let atalho of atalhos" [routerLink]="atalho.rota">
+            <strong>{{ atalho.titulo }}</strong>
+            <span>{{ atalho.detalhe }}</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="panel" id="servicos">
+        <div class="panel-heading">
+          <span>Catálogo comercial</span>
+          <h2>Especialidades e serviços</h2>
+        </div>
+        <div class="report-list">
+          <div *ngFor="let item of servicos">
+            <span>{{ item.nome }}</span>
+            <strong>{{ item.valor }}</strong>
+          </div>
+          <p class="empty-state" *ngIf="!servicos.length">Nenhum serviço cadastrado para esta empresa.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" id="agenda">
+      <div class="panel-heading">
+        <span>Agenda de consultas</span>
+        <h2>Consultas marcadas</h2>
+      </div>
+
+      <div class="table-list" *ngIf="consultas.length; else vazio">
+        <article *ngFor="let consulta of consultas">
+          <div>
+            <strong>{{ nomePaciente(consulta.pacienteId) }}</strong>
+            <p>{{ nomeProfissional(consulta.profissionalId) }} · {{ nomeServico(consulta.servicoId) }}</p>
+          </div>
+          <span>{{ consulta.data }} às {{ consulta.horario }}</span>
+          <strong>{{ formatarMoeda(consulta.valor) }}</strong>
+          <span class="status" [ngClass]="classeStatus(consulta.status)">{{ textoStatus(consulta.status) }}</span>
+          <button type="button" [disabled]="!podeAtualizar(consulta.status)" (click)="atualizarConsulta(consulta)">{{ acaoConsulta(consulta.status) }}</button>
+        </article>
+      </div>
+
+      <ng-template #vazio>
+        <p class="empty-state">Nenhuma consulta cadastrada para a sua clínica.</p>
+      </ng-template>
+
+      <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel" id="pacientes">
+        <div class="panel-heading">
+          <span>Relacionamento</span>
+          <h2>Pacientes ativos</h2>
+        </div>
+        <div class="report-list">
+          <div *ngFor="let item of pacientes">
+            <span>{{ item.nome }}</span>
+            <strong>{{ item.valor }}</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel" id="financeiro">
+        <div class="panel-heading">
+          <span>Financeiro</span>
+          <h2>Pagamentos, faturas e assinaturas</h2>
+        </div>
+        <div class="report-list">
+          <div *ngFor="let item of financeiro">
+            <span>{{ item.nome }}</span>
+            <strong>{{ item.valor }}</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" id="relatorios">
+      <div class="panel-heading">
+        <span>Inteligência operacional</span>
+        <h2>Resumo para decisão</h2>
+      </div>
+      <div class="report-list decision-grid">
+        <div *ngFor="let item of relatorios">
+          <span>{{ item.nome }}</span>
+          <strong>{{ item.valor }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="configuracoes">
+      <div class="panel-heading">
+        <span>Empresa</span>
+        <h2>Configurações da clínica</h2>
+      </div>
+      <div class="settings-grid">
+        <a *ngFor="let item of configuracoes" [routerLink]="item.rota">
+          <strong>{{ item.titulo }}</strong>
+          <span>{{ item.detalhe }}</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</section>

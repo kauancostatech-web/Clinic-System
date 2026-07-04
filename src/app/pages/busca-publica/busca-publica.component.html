@@ -1,0 +1,193 @@
+<section class="public-page">
+  <aside class="sidebar" aria-label="Navegação de consultas">
+    <a routerLink="/" class="brand">
+      <span class="brand-mark">+</span>
+      <strong>Clinic System</strong>
+    </a>
+
+    <nav>
+      <a routerLink="/" class="nav-item">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Início</span>
+      </a>
+      <a routerLink="/buscar-atendimento" class="nav-item active">
+        <i class="bi bi-calendar2-check"></i>
+        <span>Consultas</span>
+      </a>
+      <a routerLink="/buscar-atendimento" class="nav-item">
+        <i class="bi bi-person-badge"></i>
+        <span>Profissionais</span>
+      </a>
+      <a [routerLink]="estaLogadoComoPaciente ? '/dashboard-paciente' : '/login-paciente'" class="nav-item">
+        <i class="bi bi-clock-history"></i>
+        <span>Minhas consultas</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="search-shell">
+    <header class="topbar">
+      <div>
+        <strong>Consultas disponíveis</strong>
+        <span>São Paulo, Brasil</span>
+      </div>
+      <a [routerLink]="estaLogadoComoPaciente ? '/dashboard-paciente' : '/login-paciente'" class="account-button">
+        <span class="account-avatar" *ngIf="estaLogadoComoPaciente; else iconeEntrada">
+          <img *ngIf="fotoUsuario; else iniciaisEntrada" [src]="fotoUsuario" alt="Foto do paciente">
+          <ng-template #iniciaisEntrada>{{ iniciaisUsuario }}</ng-template>
+        </span>
+        <ng-template #iconeEntrada>
+          <i class="bi bi-person-circle"></i>
+        </ng-template>
+        <span class="account-copy">
+          <strong>{{ estaLogadoComoPaciente ? (usuarioLogado?.nome || 'Paciente') : 'Entrar' }}</strong>
+          <small>{{ estaLogadoComoPaciente ? 'Meu perfil' : 'Acessar conta' }}</small>
+        </span>
+      </a>
+    </header>
+
+    <section class="search-hero">
+      <div class="hero-content">
+        <span>Rede credenciada</span>
+        <h1>Busque a consulta que você precisa</h1>
+        <p>Compare profissionais de saúde em São Paulo por especialidade, região, bairro, preço, forma de pagamento e horário disponível.</p>
+      </div>
+      <figure class="hero-image" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=780&q=80" alt="">
+      </figure>
+      <div class="hero-plus" aria-hidden="true">+</div>
+    </section>
+
+    <form class="filters" aria-label="Filtros de busca">
+      <label class="field field-search">
+        <span>Especialidade, consulta, médico ou local</span>
+        <div class="control">
+          <input type="search" [(ngModel)]="termo" name="termo" placeholder="Ex.: Cardiologia, Pinheiros, Clínica Vida, Dra. Ana...">
+          <i class="bi bi-search"></i>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Localização</span>
+        <select [(ngModel)]="cidade" name="cidade">
+          <option value="">São Paulo e região</option>
+          <option *ngFor="let item of cidades" [value]="item">{{ item }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Região de alcance</span>
+        <select [(ngModel)]="regiao" name="regiao" (ngModelChange)="aoTrocarRegiao()">
+          <option value="">Todas as regiões</option>
+          <option *ngFor="let item of regioes" [value]="item.nome">{{ item.nome }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Bairro</span>
+        <select [(ngModel)]="bairro" name="bairro">
+          <option value="">Todos os bairros</option>
+          <option *ngFor="let item of bairrosDisponiveis" [value]="item">{{ item }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Especialidade</span>
+        <select [(ngModel)]="especialidade" name="especialidade">
+          <option value="">Todas as especialidades</option>
+          <option *ngFor="let item of especialidades" [value]="item.nome">{{ item.nome }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Clínica ou local</span>
+        <select [(ngModel)]="localAtendimento" name="localAtendimento">
+          <option value="">Todos os locais</option>
+          <option *ngFor="let item of locaisAtendimento" [value]="item">{{ item }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Preço máximo</span>
+        <select [(ngModel)]="precoMaximo" name="precoMaximo">
+          <option value="">Qualquer valor</option>
+          <option value="120">Até R$ 120</option>
+          <option value="150">Até R$ 150</option>
+          <option value="200">Até R$ 200</option>
+          <option value="300">Até R$ 300</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Ordenar por</span>
+        <select [(ngModel)]="ordenacao" name="ordenacao">
+          <option value="menor-preco">Menor preço</option>
+          <option value="proximo-horario">Próximo horário</option>
+        </select>
+      </label>
+
+      <button class="search-button" type="button">
+        <i class="bi bi-search"></i>
+        <span>Buscar profissionais</span>
+      </button>
+
+      <button class="clear-button" type="button" (click)="limparFiltros()">
+        Limpar filtros
+      </button>
+    </form>
+
+    <section class="summary-grid" aria-label="Resumo de resultados">
+      <article>
+        <strong>{{ medicosFiltrados.length }}</strong>
+        <span>profissionais encontrados</span>
+      </article>
+      <article>
+        <strong>{{ especialidadesDisponiveis }}</strong>
+        <span>especialidades disponíveis</span>
+      </article>
+      <article>
+        <strong>{{ totalHorariosDisponiveis }}</strong>
+        <span>com horário aberto</span>
+      </article>
+    </section>
+
+    <section class="result-section">
+      <div class="section-heading">
+        <span>Médicos e profissionais</span>
+        <strong>{{ medicosFiltrados.length }} encontrados</strong>
+      </div>
+
+      <div class="result-grid">
+        <article *ngFor="let medico of medicosFiltrados" class="result-card">
+          <header class="doctor-head">
+            <img *ngIf="medico.foto" [src]="medico.foto" [alt]="medico.nome">
+            <div>
+              <span class="tag">{{ medico.especialidade }}</span>
+              <h2>{{ medico.nome }}</h2>
+              <p *ngIf="medico.localAtendimento"><i class="bi bi-hospital"></i>{{ medico.localAtendimento }}</p>
+              <p><i class="bi bi-geo-alt"></i>{{ medico.bairro }}, {{ medico.cidade }}</p>
+              <small><i class="bi bi-star-fill"></i>{{ medico.avaliacao || '4.8' }} avaliações</small>
+            </div>
+          </header>
+
+          <div class="service-tags">
+            <span *ngFor="let servico of medico.servicos">{{ servico }}</span>
+          </div>
+
+          <footer class="card-footer">
+            <div class="price-row">
+              <small>A partir de</small>
+              <strong>{{ medico.valorConsulta }}</strong>
+            </div>
+            <a [routerLink]="['/detalhes-profissional', medico.id]">Ver perfil e horários</a>
+            <button type="button" class="favorite-button" aria-label="Favoritar profissional">
+              <i class="bi bi-heart"></i>
+            </button>
+          </footer>
+        </article>
+      </div>
+
+      <p class="empty-state" *ngIf="!medicosFiltrados.length">Nenhum profissional encontrado com esses filtros. Tente outra especialidade, bairro ou faixa de preço.</p>
+    </section>
+  </main>
+</section>

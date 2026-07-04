@@ -1,0 +1,30 @@
+<section class="flow-page">
+  <main class="flow-card">
+    <a routerLink="/buscar-atendimento">Voltar</a>
+    <span>Pagamento</span>
+    <h1>Confirmar consulta</h1>
+    <p>{{ profissional?.nome }} · {{ servico?.nome }} · {{ agenda?.data }} às {{ agenda?.horario }}</p>
+
+    <section class="appointment-summary">
+      <strong>{{ valorFormatado }}</strong>
+      <p>Consulta avulsa com confirmação imediata após o pagamento.</p>
+      <small>O horário fica reservado para você assim que a consulta for confirmada.</small>
+    </section>
+
+    <div class="payment-methods">
+      <button type="button" [class.selected]="metodo === 'PIX'" (click)="selecionarMetodo('PIX')">
+        <strong>Pix</strong>
+        <span>Confirmação rápida</span>
+      </button>
+      <button type="button" [class.selected]="metodo === 'CARTAO'" (click)="selecionarMetodo('CARTAO')">
+        <strong>Cartão de crédito</strong>
+        <span>Pagamento online</span>
+      </button>
+    </div>
+
+    <button type="button" (click)="confirmarPagamento()" [disabled]="processando">
+      {{ processando ? 'Confirmando...' : 'Confirmar pagamento e agendar' }}
+    </button>
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </main>
+</section>

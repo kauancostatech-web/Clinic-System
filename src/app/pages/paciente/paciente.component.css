@@ -1,0 +1,479 @@
+.patient-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 28px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 62% 36%, rgba(22, 153, 255, 0.46), transparent 24%),
+    radial-gradient(circle at 18% 70%, rgba(48, 161, 255, 0.26), transparent 27%),
+    linear-gradient(135deg, #033c73 0%, #0874d8 48%, #00417d 100%);
+  color: #fff;
+}
+
+.patient-page::before {
+  content: "";
+  position: absolute;
+  inset: 10% 6% auto 8%;
+  height: 72vh;
+  border-radius: 24px;
+  background: rgba(0, 54, 102, 0.34);
+  box-shadow: 0 34px 120px rgba(0, 22, 54, 0.28);
+}
+
+.topbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto 24px;
+  padding: 26px;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(65, 160, 245, 0.46), rgba(23, 129, 230, 0.38)),
+    rgba(255, 255, 255, 0.12);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 34px 90px rgba(0, 42, 122, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow,
+.section-title span {
+  display: block;
+  margin-bottom: 8px;
+  color: #075bb5;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.topbar .eyebrow {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.topbar h1,
+.section-title h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.topbar h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.08;
+}
+
+.topbar p {
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.55;
+}
+
+.empty-state {
+  color: rgba(230, 245, 255, 0.76);
+  line-height: 1.45;
+}
+
+.top-actions {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 230px;
+}
+
+.header-profile {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid rgba(200, 231, 255, 0.24);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  text-decoration: none;
+}
+
+.header-avatar {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-weight: 900;
+}
+
+.header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.header-profile strong,
+.header-profile small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-profile small {
+  margin-top: 2px;
+  color: rgba(230, 245, 255, 0.74);
+  font-weight: 800;
+}
+
+.patient-grid {
+  grid-template-columns: 1fr;
+}
+
+.profile-card {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-card h2,
+.profile-card p {
+  margin: 0;
+}
+
+.profile-card p {
+  margin-top: 6px;
+  color: rgba(230, 245, 255, 0.76);
+}
+
+.avatar-wrap {
+  display: grid;
+  place-items: center;
+  width: 86px;
+  height: 86px;
+  overflow: hidden;
+  border: 1px solid rgba(200, 231, 255, 0.34);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 18px 34px rgba(0, 24, 72, 0.2);
+}
+
+.avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-wrap span {
+  color: #fff;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.photo-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(200, 231, 255, 0.26);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.photo-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.summary-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-grid article,
+.panel {
+  border: 1px solid rgba(167, 214, 255, 0.28);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(151, 215, 255, 0.2), transparent 38%),
+    linear-gradient(135deg, rgba(66, 159, 241, 0.28), rgba(7, 84, 166, 0.18)),
+    rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 20px 44px rgba(0, 25, 78, 0.22);
+  padding: 22px;
+  backdrop-filter: blur(18px);
+  color: #fff;
+}
+
+.summary-grid span,
+.summary-grid strong {
+  display: block;
+}
+
+.summary-grid span {
+  color: rgba(230, 245, 255, 0.74);
+  font-weight: 800;
+}
+
+.summary-grid strong {
+  margin-top: 8px;
+  color: #fff;
+  font-size: 2rem;
+}
+
+.agenda-panel {
+  max-width: 100%;
+}
+
+button {
+  width: 100%;
+  border-radius: 14px;
+  font: inherit;
+}
+
+button {
+  min-height: 48px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.help-button {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border: 1px solid rgba(200, 231, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.sair {
+  background: rgba(5, 41, 82, 0.24);
+  color: #fff;
+}
+
+.mensagem {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #e7f7ef;
+  color: #0f6b3d;
+  font-weight: 800;
+}
+
+.message-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.appointment-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.appointment-list article {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) 210px;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid rgba(200, 231, 255, 0.2);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(151, 215, 255, 0.18), transparent 38%),
+    rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 16px 34px rgba(0, 24, 72, 0.18);
+}
+
+.date-box {
+  display: grid;
+  place-items: center;
+  min-height: 86px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.date-box strong {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.date-box span,
+.payment-chip small,
+.payment-chip span {
+  color: rgba(230, 245, 255, 0.78);
+  font-weight: 800;
+}
+
+.appointment-info strong {
+  display: block;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.appointment-info p {
+  margin: 6px 0 0;
+  color: rgba(230, 245, 255, 0.76);
+}
+
+.payment-chip {
+  min-width: 160px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(20, 181, 115, 0.22);
+  text-align: right;
+}
+
+.appointment-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.refund-button {
+  min-height: 40px;
+  border: 1px solid rgba(255, 190, 190, 0.28);
+  border-radius: 14px;
+  background: rgba(255, 95, 95, 0.16);
+  color: #ffd7d7;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.payment-chip.pending {
+  background: rgba(255, 214, 84, 0.22);
+}
+
+.payment-chip small,
+.payment-chip span {
+  display: block;
+}
+
+.payment-chip small {
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.empty-state {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 22px;
+  border: 1px solid rgba(200, 231, 255, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.empty-state strong {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.empty-state a {
+  justify-self: start;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #053f73;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.messages-panel {
+  grid-column: 1 / -1;
+}
+
+.message-list article {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(200, 231, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.message-list article.unread {
+  border-color: rgba(72, 190, 255, 0.58);
+  background:
+    radial-gradient(circle at 10% 14%, rgba(82, 191, 255, 0.22), transparent 34%),
+    rgba(255, 255, 255, 0.14);
+}
+
+.message-list header,
+.message-list footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.message-list strong,
+.message-list span,
+.message-list small {
+  display: block;
+}
+
+.message-list span,
+.message-list small,
+.message-list p,
+.message-list footer span {
+  color: rgba(230, 245, 255, 0.76);
+}
+
+.message-list p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.message-list button {
+  width: auto;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(200, 231, 255, 0.24);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .topbar,
+  .summary-grid,
+  .profile-card {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    display: grid;
+  }
+}
+
+@media (max-width: 560px) {
+  .patient-page {
+    padding: 16px;
+  }
+  .appointment-list article,
+  .message-list header,
+  .message-list footer {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-chip {
+    text-align: left;
+  }
+
+  .appointment-actions {
+    width: 100%;
+  }
+}

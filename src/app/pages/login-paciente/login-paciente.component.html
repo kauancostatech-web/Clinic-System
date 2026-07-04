@@ -1,0 +1,89 @@
+<section class="login-page">
+  <div class="login-stage" aria-hidden="true">
+    <span class="shape ring-top"></span>
+    <span class="shape ring-left"></span>
+    <span class="shape ring-bottom"></span>
+    <span class="shape tube-left"></span>
+    <span class="shape tube-left small"></span>
+    <span class="shape wave-right"></span>
+    <span class="shape wave-right second"></span>
+    <span class="shape pill-bottom"></span>
+  </div>
+
+  <main class="login-card">
+    <div class="brand">
+      <strong>Clinic System</strong>
+      <p>Minhas consultas</p>
+    </div>
+
+    <div class="cabecalho">
+      <h1>Login</h1>
+    </div>
+
+    <form class="formulario" (ngSubmit)="entrar()">
+      <label>
+        E-mail
+        <input type="email" [(ngModel)]="email" name="email" autocomplete="email" placeholder="seunome@email.com" required>
+      </label>
+
+      <label>
+        Senha
+        <input type="password" [(ngModel)]="senha" name="senha" autocomplete="current-password" placeholder="Digite sua senha" required>
+      </label>
+
+      <div class="forgot-row">
+        <button type="button" class="link-button" (click)="abrirRecuperacao()">Esqueci minha senha</button>
+      </div>
+
+      <button class="primary-button" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+      <div class="social-login">
+        <button type="button" (click)="entrarComSocial('Google')" [disabled]="carregando" aria-label="Entrar com Google">
+          <i class="bi bi-google"></i>
+        </button>
+        <button type="button" aria-label="Entrar com GitHub">
+          <i class="bi bi-github"></i>
+        </button>
+        <button type="button" (click)="entrarComSocial('Facebook')" [disabled]="carregando" aria-label="Entrar com Facebook">
+          <i class="bi bi-facebook"></i>
+        </button>
+      </div>
+
+      <p class="signup-text">
+        Ainda não tem conta?
+        <a routerLink="/cadastro-paciente" [queryParams]="cadastroQueryParams">Criar conta</a>
+      </p>
+    </form>
+
+    <section class="recovery-panel" *ngIf="modoRecuperacao" id="recuperar-senha">
+      <span>Recuperação de senha</span>
+      <p>Informe o e-mail da sua conta para gerar um código de troca de senha.</p>
+
+      <label>
+        E-mail vinculado
+        <input type="email" [(ngModel)]="emailRecuperacao" name="emailRecuperacao" placeholder="seunome@email.com">
+      </label>
+
+      <button type="button" class="primary-button" (click)="solicitarRecuperacao()" [disabled]="recuperandoSenha">
+        {{ recuperandoSenha ? 'Gerando código...' : 'Enviar código de recuperação' }}
+      </button>
+
+      <label>
+        Código recebido
+        <input type="text" [(ngModel)]="codigoRecuperacao" name="codigoRecuperacao" placeholder="Exemplo: A1B2C3">
+      </label>
+
+      <label>
+        Nova senha
+        <input type="password" [(ngModel)]="novaSenha" name="novaSenha" placeholder="Digite a nova senha">
+      </label>
+
+      <button type="button" class="primary-button" (click)="redefinirSenha()" [disabled]="recuperandoSenha">Trocar senha</button>
+      <p class="mensagem-recuperacao" *ngIf="mensagemRecuperacao">{{ mensagemRecuperacao }}</p>
+    </section>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </main>
+</section>

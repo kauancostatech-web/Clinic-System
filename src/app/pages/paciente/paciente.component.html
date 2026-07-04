@@ -1,0 +1,135 @@
+<section class="patient-page">
+  <header class="topbar">
+    <div>
+      <span class="eyebrow">Área do paciente</span>
+      <h1>Minhas consultas</h1>
+      <p>Olá, {{ usuarioLogado?.nome }}. Veja suas consultas marcadas e os pagamentos confirmados.</p>
+    </div>
+    <div class="top-actions">
+      <a routerLink="/perfil-paciente" class="header-profile">
+        <span class="header-avatar">
+          <img *ngIf="fotoPerfil; else avatarHeader" [src]="fotoPerfil" alt="Foto do paciente">
+          <ng-template #avatarHeader>{{ iniciaisPaciente }}</ng-template>
+        </span>
+        <span>
+          <strong>{{ usuarioLogado?.nome || paciente?.nome || 'Paciente' }}</strong>
+          <small>Meu perfil</small>
+        </span>
+      </a>
+      <a routerLink="/buscar-atendimento" class="help-button">Buscar médicos</a>
+      <button type="button" class="sair" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="patient-grid simple">
+    <section class="profile-card panel">
+      <div class="avatar-wrap">
+        <img *ngIf="fotoPerfil; else iniciais" [src]="fotoPerfil" alt="Foto do paciente">
+        <ng-template #iniciais>
+          <span>{{ iniciaisPaciente }}</span>
+        </ng-template>
+      </div>
+
+      <div>
+        <span class="eyebrow">Meu perfil</span>
+        <h2>{{ usuarioLogado?.nome }}</h2>
+        <p>{{ usuarioLogado?.email }}</p>
+      </div>
+
+      <label class="photo-button">
+        {{ salvandoFoto ? 'Salvando foto...' : 'Alterar foto' }}
+        <input type="file" accept="image/*" (change)="alterarFoto($event)" [disabled]="salvandoFoto">
+      </label>
+    </section>
+
+    <section class="summary-grid" aria-label="Resumo do paciente">
+      <article>
+        <span>Consultas marcadas</span>
+        <strong>{{ consultasAgendadas.length }}</strong>
+      </article>
+      <article>
+        <span>Pagamentos confirmados</span>
+        <strong>{{ pagamentosConfirmados.length }}</strong>
+      </article>
+      <article>
+        <span>Mensagens não lidas</span>
+        <strong>{{ mensagensNaoLidas }}</strong>
+      </article>
+    </section>
+
+    <section class="panel agenda-panel">
+      <div class="section-title">
+        <span>Agenda</span>
+        <h2>Consultas marcadas</h2>
+      </div>
+
+      <div class="appointment-list" *ngIf="consultasAgendadas.length; else semConsultas">
+        <article *ngFor="let consulta of consultasAgendadas">
+          <div class="date-box">
+            <strong>{{ formatarDia(consulta.data) }}</strong>
+            <span>{{ consulta.horario }}</span>
+          </div>
+
+          <div class="appointment-info">
+            <strong>{{ consulta.especialidadeOuMedico }}</strong>
+            <p>{{ consulta.local }}</p>
+          </div>
+
+          <div class="appointment-actions">
+            <div class="payment-chip" [class.pending]="consulta.status === 'Pendente'">
+              <small>{{ consulta.valor || 'Valor a confirmar' }}</small>
+              <span>{{ statusPagamento(consulta) }}</span>
+            </div>
+
+            <button type="button" class="refund-button" (click)="desistirConsulta(consulta)">
+              Desistir da consulta
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+
+      <ng-template #semConsultas>
+        <div class="empty-state">
+          <strong>Você ainda não tem consulta marcada.</strong>
+          <p>Busque um médico, veja avaliações, escolha um horário e confirme o pagamento.</p>
+          <a routerLink="/buscar-atendimento">Buscar médicos</a>
+        </div>
+      </ng-template>
+    </section>
+
+    <section class="panel messages-panel">
+      <div class="section-title">
+        <span>Mensagens</span>
+        <h2>Avisos dos profissionais</h2>
+      </div>
+
+      <div class="message-list" *ngIf="mensagens.length; else semMensagens">
+        <article *ngFor="let item of mensagens" [class.unread]="item.status === 'NAO_LIDA'">
+          <header>
+            <div>
+              <strong>{{ item.titulo }}</strong>
+              <span>{{ item.profissionalNome }}</span>
+            </div>
+            <small>{{ item.criadoEm }}</small>
+          </header>
+          <p>{{ item.texto }}</p>
+          <footer>
+            <span *ngIf="item.consultaData">Consulta: {{ item.consultaData }} às {{ item.consultaHorario }}</span>
+            <button type="button" (click)="marcarMensagemComoLida(item)" [disabled]="item.status === 'LIDA'">
+              {{ item.status === 'LIDA' ? 'Lida' : 'Marcar como lida' }}
+            </button>
+          </footer>
+        </article>
+      </div>
+
+      <ng-template #semMensagens>
+        <div class="empty-state">
+          <strong>Nenhuma mensagem por enquanto.</strong>
+          <p>Quando um profissional enviar um aviso sobre sua consulta, ele aparecerá aqui.</p>
+        </div>
+      </ng-template>
+    </section>
+  </main>
+</section>

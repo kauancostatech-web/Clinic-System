@@ -1,0 +1,73 @@
+<section class="page">
+  <div class="card">
+    <div class="cabecalho">
+      <span>Portal da empresa</span>
+      <h1>Cadastrar empresa de saúde</h1>
+      <p>O CNPJ fica bloqueado após o cadastro e a aprovação será feita pelo administrador da plataforma.</p>
+    </div>
+
+    <form class="formulario" (ngSubmit)="cadastrar()">
+      <label>
+        CNPJ
+        <input type="text" [(ngModel)]="cnpj" name="cnpj" (input)="formatarCnpj()" (blur)="consultarCnpj()" placeholder="00.000.000/0000-00" required>
+      </label>
+
+      <button type="button" class="secondary" (click)="consultarCnpj()" [disabled]="consultando">
+        {{ consultando ? 'Consultando CNPJ...' : 'Consultar CNPJ' }}
+      </button>
+
+      <label>
+        Razão social
+        <input type="text" [(ngModel)]="razaoSocial" name="razaoSocial" required>
+      </label>
+
+      <label>
+        Nome fantasia
+        <input type="text" [(ngModel)]="nomeFantasia" name="nomeFantasia" required>
+      </label>
+
+      <label>
+        Telefone
+        <input type="text" [(ngModel)]="telefone" name="telefone" (input)="formatarTelefone()" placeholder="(00) 00000-0000">
+      </label>
+
+      <label>
+        E-mail da empresa
+        <input type="email" [(ngModel)]="email" name="email" required>
+      </label>
+
+      <label>
+        Endereço
+        <input type="text" [(ngModel)]="endereco" name="endereco">
+      </label>
+
+      <label>
+        Descrição da empresa
+        <textarea [(ngModel)]="descricao" name="descricao" rows="3"></textarea>
+      </label>
+
+      <div class="form-row">
+        <label>
+          Administrador
+          <input type="text" [(ngModel)]="adminNome" name="adminNome" required>
+        </label>
+        <label>
+          E-mail do administrador
+          <input type="email" [(ngModel)]="adminEmail" name="adminEmail" required>
+        </label>
+      </div>
+
+      <label>
+        Senha
+        <input type="password" [(ngModel)]="senha" name="senha" required>
+      </label>
+
+      <div class="acoes">
+        <button type="submit" [disabled]="salvando">{{ salvando ? 'Cadastrando...' : 'Cadastrar empresa' }}</button>
+        <a routerLink="/login-empresa">Já tenho conta</a>
+      </div>
+    </form>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </div>
+</section>

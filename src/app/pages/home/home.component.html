@@ -1,0 +1,113 @@
+<section class="home-page">
+  <header class="topbar">
+    <a routerLink="/" class="brand">Clinic System</a>
+    <nav aria-label="Navegacao principal">
+      <a routerLink="/buscar-atendimento">Consultas</a>
+      <a [routerLink]="estaLogadoComoPaciente ? '/dashboard-paciente' : '/login-paciente'" class="profile-link">
+        <span class="profile-avatar" *ngIf="estaLogadoComoPaciente; else loginIcon">
+          <img *ngIf="fotoUsuario; else loginInitials" [src]="fotoUsuario" alt="Foto do paciente">
+          <ng-template #loginInitials>{{ iniciaisUsuario }}</ng-template>
+        </span>
+        <ng-template #loginIcon>
+          <i class="bi bi-person-circle"></i>
+        </ng-template>
+        <span>
+          <strong>{{ estaLogadoComoPaciente ? (usuarioLogado?.nome || 'Paciente') : 'Entrar' }}</strong>
+          <small>{{ estaLogadoComoPaciente ? 'Meu perfil' : 'Acessar conta' }}</small>
+        </span>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Consultas em São Paulo</span>
+        <h1>Clinic System</h1>
+        <p>Encontre médicos e profissionais de saúde disponíveis, compare valores por região e marque sua consulta sem complicação.</p>
+
+        <div class="consult-card">
+          <div>
+            <strong>Compare antes de marcar</strong>
+            <span>Especialidade, bairro, preço, Pix, cartão e horário disponível.</span>
+          </div>
+          <a routerLink="/buscar-atendimento">Consulte agora</a>
+        </div>
+
+        <div class="actions">
+          <a routerLink="/buscar-atendimento" class="button primary">Ver médicos disponíveis</a>
+        </div>
+      </div>
+
+      <aside class="care-panel" aria-label="Resumo da plataforma">
+        <div class="panel-header">
+          <span>Hoje na rede</span>
+          <strong>128 horários disponíveis</strong>
+        </div>
+        <article>
+          <span>Consulta avulsa</span>
+          <strong>A partir de R$ 89,90</strong>
+        </article>
+        <article>
+          <span>Assinatura mensal</span>
+          <strong>A partir de R$ 29,90</strong>
+        </article>
+        <article>
+          <span>Regiões atendidas</span>
+          <strong>São Paulo e região metropolitana</strong>
+        </article>
+      </aside>
+    </section>
+
+    <section class="section public-area">
+      <div class="section-title">
+        <span>Agendamento</span>
+        <h2>Marque em poucos passos</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <strong>1. Busque a consulta</strong>
+          <p>Escolha especialidade, região, bairro ou faixa de preço.</p>
+        </article>
+        <article>
+          <strong>2. Veja o profissional</strong>
+          <p>Confira valor, localização, avaliações e horários disponíveis.</p>
+        </article>
+        <article>
+          <strong>3. Agende e pague</strong>
+          <p>Escolha Pix ou cartão e confirme sua consulta.</p>
+        </article>
+        <article>
+          <strong>4. Acompanhe depois</strong>
+          <p>Entre quando quiser para ver data, horário, valor pago e cancelamento.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section benefits-area">
+      <div class="section-title">
+        <span>Por que usar</span>
+        <h2>Compare com calma antes de escolher</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <strong>Médicos em toda São Paulo</strong>
+          <p>Encontre profissionais por bairro, região e especialidade.</p>
+        </article>
+        <article>
+          <strong>Consulta marcada rápido</strong>
+          <p>Veja horários abertos e escolha o melhor dia para você.</p>
+        </article>
+        <article>
+          <strong>Valores visíveis</strong>
+          <p>Compare preço, distância, avaliação e forma de pagamento.</p>
+        </article>
+        <article>
+          <strong>Informações em um só lugar</strong>
+          <p>Perfil do profissional, serviço, endereço, agenda e pagamento.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+</section>

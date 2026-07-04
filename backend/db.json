@@ -1,106 +1,406 @@
 {
-  "pacientes": [
-    {
-      "nome": "nbkvkjhg",
-      "cpf": "33131414341",
-      "telefone": "11958486320",
-      "id": 1
-    }
-  ],
-  "consultas": [
-    {
-      "tipo": "Presencial",
-      "especialidadeOuMedico": "Cardiologia",
-      "local": "Unidade Centro",
-      "paciente": "kauan",
-      "pagamento": "Particular",
-      "data": "2026-06-02",
-      "horario": "12:30",
-      "status": "Agendada",
-      "id": 1
-    }
-  ],
-  "receitas": [],
-  "medicamentos": [],
-  "exames": [
+  "empresas": [
     {
       "id": 1,
-      "nome": "Hemograma completo",
-      "preparo": "Jejum nao obrigatorio"
+      "nomeFantasia": "Clínica Vida Saúde",
+      "razaoSocial": "Clínica Vida Saúde LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "telefone": "(11) 3000-1000",
+      "email": "contato@clinica.com",
+      "endereco": "Bela Vista, São Paulo - SP",
+      "descricao": "Clínica especializada em atendimento médico particular, check-ups e acompanhamento recorrente.",
+      "logo": "",
+      "ativo": true,
+      "aprovada": true,
+      "criadoEm": "2026-07-02"
     },
     {
       "id": 2,
-      "nome": "Raio-X",
-      "preparo": "Levar documento com foto"
-    }
-  ],
-  "especialidades": [
-    {
-      "id": 1,
-      "nome": "Cardiologia"
-    },
-    {
-      "id": 2,
-      "nome": "Clinico geral"
-    },
-    {
-      "id": 3,
-      "nome": "Ortopedia"
-    }
-  ],
-  "medicos": [
-    {
-      "id": 1,
-      "nome": "Dra. Ana Martins",
-      "especialidade": "Cardiologia"
-    },
-    {
-      "id": 2,
-      "nome": "Dr. Carlos Lima",
-      "especialidade": "Clinico geral"
-    }
-  ],
-  "unidades": [
-    {
-      "id": 1,
-      "nome": "Unidade Centro"
-    },
-    {
-      "id": 2,
-      "nome": "Unidade Norte"
+      "nomeFantasia": "Consultórios Vida Pinheiros",
+      "razaoSocial": "Vida Consultórios LTDA",
+      "cnpj": "98.765.432/0001-10",
+      "telefone": "(11) 3000-2000",
+      "email": "empresa@vida.com",
+      "endereco": "Pinheiros, São Paulo - Brasil",
+      "descricao": "Consultórios integrados para dermatologia, ortopedia, psicologia e acompanhamento preventivo.",
+      "logo": "",
+      "ativo": true,
+      "aprovada": false,
+      "criadoEm": "2026-07-02"
     }
   ],
   "usuarios": [
     {
       "id": 1,
-      "nome": "Administrador",
+      "nome": "Admin Clínica Vida",
+      "email": "admin@clinica.com",
+      "senha": "123456",
+      "perfil": "EMPRESA_ADMIN",
+      "empresaId": 1,
+      "pacienteId": null,
+      "ativo": true,
+      "fotoUrl": ""
+    },
+    {
+      "id": 2,
+      "nome": "Maria Silva",
+      "email": "maria@email.com",
+      "senha": "123456",
+      "perfil": "PACIENTE",
+      "empresaId": null,
+      "pacienteId": 1,
+      "ativo": true,
+      "fotoUrl": ""
+    },
+    {
+      "id": 3,
+      "nome": "Administrador da Plataforma",
       "email": "admin@clinicsystem.local",
       "senha": "admin123",
-      "perfil": "admin"
-    },
-    {
-      "nome": "kauan",
-      "email": "kauan.tv06@gmail.com",
-      "senha": "1234",
-      "perfil": "paciente",
-      "id": 2
+      "perfil": "ADMIN_PLATAFORMA",
+      "empresaId": null,
+      "pacienteId": null,
+      "ativo": true,
+      "fotoUrl": ""
     }
   ],
-  "tokensSenha": [],
-  "tokensPagamento": [
+  "pacientes": [
     {
-      "email": "kauan.tv06@gmail.com",
-      "token": "BJ2KTE",
-      "criadoEm": "2026-06-09T13:04:52.645Z",
-      "status": "gerado",
-      "id": 1
+      "id": 1,
+      "nome": "Maria Silva",
+      "cpf": "529.982.247-25",
+      "dataNascimento": "2000-01-01",
+      "telefone": "(11) 99999-9999",
+      "email": "maria@email.com",
+      "endereco": "São Paulo - SP",
+      "fotoUrl": "",
+      "ativo": true
+    }
+  ],
+  "profissionais": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "nome": "Dr. João Silva",
+      "especialidade": "Clínico Geral",
+      "registro": "CRM 123456",
+      "descricao": "Consulta clínica geral para avaliação inicial, sintomas comuns, check-up e acompanhamento de rotina.",
+      "foto": "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
     },
     {
-      "email": "kauan.tv06@gmail.com",
-      "token": "ZF75FI",
-      "criadoEm": "2026-06-09T13:11:55.740Z",
-      "status": "gerado",
-      "id": 2
+      "id": 2,
+      "empresaId": 1,
+      "nome": "Dra. Ana Martins",
+      "especialidade": "Cardiologia",
+      "registro": "CRM 654321",
+      "descricao": "Cardiologista com foco em prevenção, check-up e acompanhamento de pacientes recorrentes.",
+      "foto": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "empresaId": 2,
+      "nome": "Dra. Renata Souza",
+      "especialidade": "Dermatologia",
+      "registro": "CRM 998877",
+      "descricao": "Dermatologia clínica para pele, cabelo, unhas, alergias e rotina preventiva.",
+      "foto": "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "empresaId": 1,
+      "nome": "Dra. Paula Nogueira",
+      "especialidade": "Ginecologia",
+      "registro": "CRM 224510",
+      "descricao": "Atendimento ginecológico, prevenção, rotina feminina, orientação contraceptiva e acompanhamento anual.",
+      "foto": "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "empresaId": 2,
+      "nome": "Dr. Marcos Lima",
+      "especialidade": "Ortopedia",
+      "registro": "CRM 187452",
+      "descricao": "Consulta ortopédica para dores articulares, coluna, joelho, ombro, lesões e acompanhamento de exames.",
+      "foto": "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "empresaId": 2,
+      "nome": "Dra. Camila Rocha",
+      "especialidade": "Psicologia",
+      "registro": "CRP 06/182940",
+      "descricao": "Sessões de psicologia para ansiedade, rotina, autoestima, relações e acompanhamento emocional.",
+      "foto": "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=420&q=80",
+      "ativo": true
     }
-  ]
+  ],
+  "servicos": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "nome": "Consulta clínica geral",
+      "descricao": "Consulta presencial com clínico geral.",
+      "valor": 132,
+      "duracaoMinutos": 30,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "empresaId": 1,
+      "profissionalId": 2,
+      "nome": "Consulta cardiológica",
+      "descricao": "Avaliação cardiológica com orientação e plano de acompanhamento.",
+      "valor": 196,
+      "duracaoMinutos": 40,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "empresaId": 2,
+      "profissionalId": 3,
+      "nome": "Consulta dermatológica",
+      "descricao": "Consulta para pele, cabelo, unhas e alergias.",
+      "valor": 161,
+      "duracaoMinutos": 40,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "empresaId": 1,
+      "profissionalId": 4,
+      "nome": "Consulta ginecológica",
+      "descricao": "Consulta ginecológica de rotina, prevenção e orientação.",
+      "valor": 150,
+      "duracaoMinutos": 40,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "empresaId": 2,
+      "profissionalId": 5,
+      "nome": "Consulta ortopédica",
+      "descricao": "Avaliação ortopédica para dores e lesões.",
+      "valor": 175,
+      "duracaoMinutos": 35,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "empresaId": 2,
+      "profissionalId": 6,
+      "nome": "Sessão de psicologia",
+      "descricao": "Sessão individual de psicologia.",
+      "valor": 120,
+      "duracaoMinutos": 50,
+      "formasPagamento": [
+        "PIX",
+        "CARTAO"
+      ],
+      "ativo": true
+    }
+  ],
+  "agendas": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "data": "2026-07-06",
+      "horario": "08:30",
+      "disponivel": true
+    },
+    {
+      "id": 2,
+      "empresaId": 1,
+      "profissionalId": 2,
+      "data": "2026-07-06",
+      "horario": "10:00",
+      "disponivel": true
+    },
+    {
+      "id": 3,
+      "empresaId": 2,
+      "profissionalId": 3,
+      "data": "2026-07-07",
+      "horario": "16:00",
+      "disponivel": true
+    },
+    {
+      "id": 4,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "data": "2026-07-06",
+      "horario": "14:00",
+      "disponivel": true
+    },
+    {
+      "id": 5,
+      "empresaId": 1,
+      "profissionalId": 4,
+      "data": "2026-07-07",
+      "horario": "09:30",
+      "disponivel": true
+    },
+    {
+      "id": 6,
+      "empresaId": 2,
+      "profissionalId": 5,
+      "data": "2026-07-08",
+      "horario": "13:30",
+      "disponivel": true
+    },
+    {
+      "id": 7,
+      "empresaId": 2,
+      "profissionalId": 6,
+      "data": "2026-07-08",
+      "horario": "18:00",
+      "disponivel": true
+    },
+    {
+      "id": 8,
+      "empresaId": 1,
+      "profissionalId": 2,
+      "data": "2026-07-09",
+      "horario": "15:30",
+      "disponivel": true
+    },
+    {
+      "id": 9,
+      "empresaId": 2,
+      "profissionalId": 3,
+      "data": "2026-07-10",
+      "horario": "11:00",
+      "disponivel": true
+    },
+    {
+      "id": 10,
+      "empresaId": 1,
+      "profissionalId": 4,
+      "data": "2026-07-10",
+      "horario": "16:30",
+      "disponivel": true
+    },
+    {
+      "id": 11,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "data": "2026-07-07",
+      "horario": "10:30",
+      "disponivel": true
+    }
+  ],
+  "agendamentos": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "pacienteId": 1,
+      "profissionalId": 2,
+      "servicoId": 2,
+      "agendaId": 2,
+      "data": "2026-07-11",
+      "horario": "10:00",
+      "status": "CANCELADO",
+      "valor": 180
+    }
+  ],
+  "pagamentos": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "pacienteId": 1,
+      "agendamentoId": 1,
+      "valor": 180,
+      "metodo": "PIX",
+      "status": "REEMBOLSADO",
+      "criadoEm": "2026-07-02"
+    }
+  ],
+  "avaliacoes": [
+    {
+      "id": 1,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "pacienteId": 1,
+      "pacienteNome": "Maria Silva",
+      "nota": 5,
+      "comentario": "Médico super atencioso, explicou tudo com calma e não ficou com pressa na consulta.",
+      "criadoEm": "2026-07-01",
+      "consultaRealizada": true
+    },
+    {
+      "id": 2,
+      "empresaId": 1,
+      "profissionalId": 1,
+      "pacienteId": 2,
+      "pacienteNome": "Rafael Almeida",
+      "nota": 4,
+      "comentario": "Gostei bastante, consulta no horário e o doutor foi bem direto no que eu precisava fazer.",
+      "criadoEm": "2026-06-28",
+      "consultaRealizada": true
+    },
+    {
+      "id": 3,
+      "empresaId": 1,
+      "profissionalId": 2,
+      "pacienteId": 1,
+      "pacienteNome": "Maria Silva",
+      "nota": 5,
+      "comentario": "Dra. Ana muito atenciosa, pediu os exames certinhos e explicou os próximos passos.",
+      "criadoEm": "2026-07-02",
+      "consultaRealizada": true
+    },
+    {
+      "id": 4,
+      "empresaId": 2,
+      "profissionalId": 3,
+      "pacienteId": 3,
+      "pacienteNome": "Camila Rocha",
+      "nota": 5,
+      "comentario": "A doutora foi super cuidadosa, olhou minha pele com atenção e passou um tratamento fácil de entender.",
+      "criadoEm": "2026-06-30",
+      "consultaRealizada": true
+    }
+  ],
+  "mensagens": [
+    {
+      "id": 1,
+      "pacienteId": 1,
+      "profissionalId": 2,
+      "profissionalNome": "Dra. Ana Martins",
+      "titulo": "Confirmação da consulta",
+      "texto": "Olá, Maria. Sua consulta está confirmada. Chegue com 15 minutos de antecedência e leve seus exames recentes, se tiver.",
+      "criadoEm": "2026-07-04",
+      "status": "LIDA",
+      "consultaData": "2026-07-11",
+      "consultaHorario": "10:00"
+    }
+  ],
+  "validacoes": [],
+  "tokensSenha": []
 }

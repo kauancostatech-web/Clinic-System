@@ -1,49 +1,138 @@
 # Clinic System
 
-Sistema web para cadastro e gerenciamento de pacientes, desenvolvido com Angular.
+Projeto Integrador desenvolvido no segundo semestre do curso de Analise e Desenvolvimento de Sistemas.
 
-O projeto faz parte de um sistema hospitalar em desenvolvimento e atualmente possui a tela de pacientes com cadastro, listagem, edicao e exclusao de registros.
+O Clinic System e um prototipo de plataforma para agendamento de consultas. A ideia principal e permitir que pacientes encontrem profissionais de saude por especialidade, regiao, bairro, preco e horario disponivel. O projeto tambem possui uma area separada para clinicas cadastrarem profissionais, servicos e agenda.
 
 ## Objetivo
 
-Facilitar o controle inicial de pacientes em uma clinica ou ambiente hospitalar, mantendo os dados principais organizados em uma interface simples e objetiva.
+Criar uma aplicacao web simples para simular o fluxo de uma plataforma de consultas:
 
-## Funcionalidades
+- o paciente pesquisa profissionais disponiveis;
+- acessa o perfil publico do profissional;
+- escolhe um dia e horario;
+- faz login ou cadastro;
+- confirma o pagamento;
+- acompanha suas consultas na area do paciente;
+- a clinica gerencia profissionais, servicos, agenda e pagamentos.
 
-- Cadastro de pacientes
-- Listagem de pacientes cadastrados
-- Edicao de dados do paciente
-- Exclusao de pacientes
-- Mensagens de sucesso e erro
-- Integracao com uma API local usando JSON Server
+## Tecnologias utilizadas
 
-## Tecnologias Utilizadas
-
-- Angular 19
+- Angular
 - TypeScript
 - HTML
 - CSS
 - JSON Server
-- Node.js / npm
+- Bootstrap Icons
 
-## Estrutura Principal
+## Estrutura principal
 
 ```text
-clinic-system/
-├── backend/
-│   └── db.json
-├── src/
-│   └── app/
-│       └── pages/
-│           └── pacientes/
-├── angular.json
-├── package.json
-└── README.md
+src/app/pages
 ```
 
-## Como Rodar o Projeto
+Contem as telas principais do sistema, como home, busca publica, perfil do profissional, login, cadastro, area do paciente e painel da empresa.
 
-Antes de iniciar, instale o Node.js LTS.
+```text
+src/app/services
+```
+
+Contem os services usados para acessar os dados do JSON Server e centralizar regras como autenticacao, pacientes, empresas, profissionais, agenda, agendamentos e pagamentos.
+
+```text
+backend/db.json
+```
+
+Arquivo usado pelo JSON Server para simular o banco de dados local do projeto.
+
+## Funcionalidades
+
+### Area publica
+
+- Pagina inicial
+- Busca de profissionais
+- Filtro por cidade, regiao, bairro, especialidade, clinica e preco
+- Perfil publico do profissional
+- Avaliacoes do profissional
+- Calendario com horarios disponiveis e ocupados
+- Fluxo de agendamento
+- Login e cadastro do paciente
+
+### Area do paciente
+
+- Visualizacao das consultas marcadas
+- Status de pagamento
+- Cancelamento com marcacao de reembolso
+- Mensagens enviadas por profissionais
+- Foto/avatar do paciente
+
+### Area da empresa
+
+- Login separado para clinicas
+- Dashboard administrativo
+- Cadastro de profissionais
+- Cadastro de servicos
+- Agenda de consultas
+- Lista de pacientes
+- Pagamentos
+- Configuracoes da empresa
+
+## Rotas principais
+
+### Paciente e area publica
+
+```text
+/
+/home
+/buscar-atendimento
+/detalhes-profissional/:id
+/agendar-consulta/:id
+/login-paciente
+/cadastro-paciente
+/dashboard-paciente
+/pagamento/:id
+/confirmacao-consulta
+```
+
+### Empresa
+
+```text
+/para-empresas
+/login-empresa
+/cadastro-empresa
+/empresa/dashboard
+/empresa/profissionais
+/empresa/agenda
+/empresa/pacientes
+/empresa/servicos
+/empresa/pagamentos
+/empresa/configuracoes
+```
+
+## Dados de acesso para teste
+
+Paciente:
+
+```text
+E-mail: maria@email.com
+Senha: 123456
+```
+
+Empresa:
+
+```text
+E-mail: admin@clinica.com
+Senha: 123456
+```
+
+Admin da plataforma:
+
+```text
+E-mail: admin@clinicsystem.local
+Senha: admin123
+```
+
+## Como executar o projeto
 
 Instale as dependencias:
 
@@ -69,42 +158,8 @@ Acesse no navegador:
 http://localhost:4200
 ```
 
-## API Local
+## Observacoes
 
-O projeto usa o JSON Server como backend temporario.
+Este projeto usa JSON Server para simular o backend. Por isso, os dados ficam em um arquivo local e podem ser alterados durante os testes.
 
-Arquivo de dados:
-
-```text
-backend/db.json
-```
-
-Endereco da API:
-
-```text
-http://127.0.0.1:3000
-```
-
-Recurso principal:
-
-```text
-/pacientes
-```
-
-## Status do Projeto
-
-Em desenvolvimento.
-
-Modulo atual:
-
-- Pacientes
-
-Modulos planejados:
-
-- Consultas
-- Receitas
-- Medicamentos
-
-## Autor
-
-Kauan Costa
+O sistema foi desenvolvido com foco academico, para demonstrar organizacao de componentes, rotas, services, formularios, consumo de API local e separacao entre area publica, area do paciente e area administrativa da clinica.

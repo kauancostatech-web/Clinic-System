@@ -33,7 +33,14 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": [
+                "localhost",
+                "127.0.0.1",
+                "192.168.15.4",
+                "localhost:4200",
+                "127.0.0.1:4200",
+                "192.168.15.4:4200"
+              ]
             },
             "ssr": {
               "entry": "src/server.ts"
@@ -65,6 +72,16 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "allowedHosts": [
+              "localhost",
+              "127.0.0.1",
+              "192.168.15.4",
+              "localhost:4200",
+              "127.0.0.1:4200",
+              "192.168.15.4:4200"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "clinic-system:build:production"

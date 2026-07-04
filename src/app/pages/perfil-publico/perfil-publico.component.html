@@ -1,0 +1,146 @@
+<section class="profile-page">
+  <header class="topbar">
+    <a routerLink="/" class="brand">Clinic System</a>
+    <nav aria-label="Navegacao publica">
+      <a routerLink="/buscar-atendimento">Consultas</a>
+    </nav>
+  </header>
+
+  <main class="profile-shell" *ngIf="medico; else naoEncontrado">
+    <section class="profile-hero">
+      <div>
+        <span>{{ medico.especialidade }}</span>
+        <h1>{{ medico.nome }}</h1>
+        <p>{{ medico.resumo }} · {{ medico.bairro }}, {{ medico.cidade }}</p>
+        <div class="payment-tags" *ngIf="medico?.formasPagamento?.length">
+          <span *ngFor="let forma of medico?.formasPagamento">{{ forma }}</span>
+        </div>
+      </div>
+      <div class="rating">
+        <small>Avaliação</small>
+        <strong>{{ mediaAvaliacoes }}</strong>
+        <p>{{ totalAvaliacoes }}</p>
+      </div>
+    </section>
+
+    <section class="profile-grid">
+      <article class="panel">
+        <span>Valores</span>
+        <h2>Consultas disponíveis</h2>
+        <div class="price-card" *ngFor="let servico of servicos">
+          <strong>R$ {{ servico.valor.toFixed(2).replace('.', ',') }}</strong>
+          <p>{{ servico.nome }} · {{ servico.duracaoMinutos }} minutos</p>
+        </div>
+        <div class="price-card" *ngIf="!servicos.length">
+          <strong>{{ medico.valorConsulta }}</strong>
+          <p>Valor informado pelo local responsável pelo atendimento.</p>
+        </div>
+        <div class="price-card muted" *ngIf="medico.assinatura">
+          <strong>{{ medico.assinatura }}</strong>
+          <p>Assinatura mensal para quem deseja benefícios recorrentes.</p>
+        </div>
+      </article>
+
+      <article class="panel">
+        <span>Agenda</span>
+        <h2>Calendário do profissional</h2>
+        <div class="calendar-legend">
+          <span><i class="available-dot"></i>Disponível</span>
+          <span><i class="booked-dot"></i>Já marcado</span>
+        </div>
+        <div class="month-card" *ngIf="diasCalendario.length">
+          <header>
+            <button type="button" aria-label="Mês anterior" (click)="mesAnterior()">‹</button>
+            <strong>{{ mesCalendario }}</strong>
+            <button type="button" aria-label="Próximo mês" (click)="proximoMes()">›</button>
+          </header>
+          <div class="week-days">
+            <span *ngFor="let dia of diasSemana">{{ dia }}</span>
+          </div>
+          <div class="month-grid">
+            <button
+              type="button"
+              *ngFor="let dia of diasCalendario"
+              [class.outside]="dia.foraDoMes"
+              [class.available]="dia.disponivel"
+              [class.booked]="dia.ocupado"
+              [class.selected]="dia.data === dataSelecionada"
+              (click)="selecionarDia(dia)">
+              {{ dia.dia }}
+            </button>
+          </div>
+        </div>
+
+        <div class="calendar-slots">
+          <button
+            type="button"
+            *ngFor="let horario of horariosDoDiaSelecionado"
+            [class.available]="horario.disponivel"
+            [class.booked]="!horario.disponivel"
+            [class.selected]="horario.id === agendaSelecionadaId"
+            [attr.aria-disabled]="!horario.disponivel"
+            (click)="selecionarAgenda(horario)">
+            <small>{{ horario.data }}</small>
+            <strong>{{ horario.horario }}</strong>
+            <span>{{ horario.disponivel ? 'Disponível' : 'Já marcado' }}</span>
+          </button>
+        </div>
+        <p class="hint" *ngIf="dataSelecionada && !horariosDoDiaSelecionado.length">Esse dia ainda não tem horários abertos.</p>
+        <p class="hint warning" *ngIf="avisoAgenda">{{ avisoAgenda }}</p>
+        <a
+          *ngIf="agendaSelecionada"
+          class="confirm-slot"
+          [routerLink]="['/agendar-consulta', medico.id]"
+          [queryParams]="{ agendaId: agendaSelecionada.id }">
+          Confirmar consulta nesse dia
+        </a>
+        <p class="hint" *ngIf="!horarios.length">Este profissional ainda não abriu horários na agenda.</p>
+        <p class="hint">Entre para concluir o agendamento e pagamento.</p>
+      </article>
+
+      <article class="panel wide">
+        <span>Atendimento</span>
+        <h2>Especialidades e serviços</h2>
+        <div class="service-list">
+          <span>{{ medico.especialidade }}</span>
+          <span *ngFor="let servico of servicos">{{ servico.nome }}</span>
+        </div>
+      </article>
+
+      <article class="panel wide reviews-panel" *ngIf="medico">
+        <div class="reviews-heading">
+          <div>
+            <span>Avaliações</span>
+            <h2>O que outras pessoas dizem</h2>
+          </div>
+          <strong>{{ mediaAvaliacoes }}</strong>
+        </div>
+
+        <div class="reviews-list" *ngIf="avaliacoes.length; else semAvaliacoes">
+          <article *ngFor="let avaliacao of avaliacoes">
+            <header>
+              <div>
+                <strong>{{ avaliacao.pacienteNome }}</strong>
+                <small>{{ avaliacao.criadoEm }}</small>
+              </div>
+              <span>{{ estrelas(avaliacao.nota) }}</span>
+            </header>
+            <p>{{ avaliacao.comentario }}</p>
+            <small class="verified" *ngIf="avaliacao.consultaRealizada">Consulta realizada pela plataforma</small>
+          </article>
+        </div>
+
+        <ng-template #semAvaliacoes>
+          <p class="hint">Este profissional ainda não tem avaliações publicadas. Você ainda pode conferir valores e horários antes de agendar.</p>
+        </ng-template>
+      </article>
+    </section>
+  </main>
+
+  <ng-template #naoEncontrado>
+    <main class="empty">
+      <h1>Perfil não encontrado</h1>
+      <a routerLink="/buscar-atendimento">Voltar para a busca</a>
+    </main>
+  </ng-template>
+</section>

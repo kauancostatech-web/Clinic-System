@@ -1,0 +1,447 @@
+.profile-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 62% 36%, rgba(22, 153, 255, 0.56), transparent 24%),
+    radial-gradient(circle at 18% 70%, rgba(48, 161, 255, 0.34), transparent 27%),
+    linear-gradient(135deg, #033c73 0%, #0874d8 48%, #00417d 100%);
+  color: #fff;
+}
+
+.topbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.brand,
+nav a,
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+nav a {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.profile-shell,
+.empty {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px 56px;
+}
+
+.profile-hero,
+.panel {
+  border: 1px solid rgba(167, 214, 255, 0.32);
+  border-radius: 22px;
+  box-shadow: 0 14px 36px rgba(20, 62, 100, 0.08);
+  background:
+    linear-gradient(135deg, rgba(65, 160, 245, 0.4), rgba(23, 129, 230, 0.34)),
+    rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.profile-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 28px;
+  background:
+    linear-gradient(135deg, rgba(65, 160, 245, 0.42), rgba(23, 129, 230, 0.34)),
+    rgba(255, 255, 255, 0.12);
+}
+
+.profile-hero span,
+.panel > span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.profile-hero h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  line-height: 1.02;
+}
+
+.profile-hero p,
+.price-card p,
+.hint {
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.5;
+}
+
+.hint.warning {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 210, 98, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 190, 60, 0.14);
+  color: #ffe6a8;
+  font-weight: 800;
+}
+
+.rating {
+  min-width: 150px;
+  align-self: start;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.payment-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.payment-tags span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.rating small,
+.rating strong,
+.rating p {
+  display: block;
+}
+
+.rating strong {
+  margin-top: 6px;
+  font-size: 2rem;
+}
+
+.rating p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.86rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.panel {
+  padding: 22px;
+}
+
+.panel h2 {
+  margin: 8px 0 16px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.price-card {
+  padding: 16px;
+  border-radius: 18px;
+  background: #053f73;
+  color: #fff;
+}
+
+.price-card + .price-card {
+  margin-top: 10px;
+}
+
+.price-card p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.muted {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.muted p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+ .service-list span {
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(200, 231, 255, 0.2);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.calendar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.calendar-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.month-card {
+  padding: 14px;
+  border: 1px solid rgba(200, 231, 255, 0.18);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(0, 106, 255, 0.2), transparent 38%),
+    rgba(2, 19, 48, 0.42);
+}
+
+.month-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.month-card header button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+.month-card header strong {
+  text-transform: capitalize;
+}
+
+.week-days,
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.week-days span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.month-grid {
+  margin-top: 8px;
+}
+
+.month-grid button {
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.month-grid button.outside {
+  color: rgba(255, 255, 255, 0.24);
+}
+
+.month-grid button.available {
+  background: #0b6cff;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(11, 108, 255, 0.32);
+}
+
+.month-grid button.booked {
+  background: rgba(255, 83, 83, 0.22);
+  color: rgba(255, 205, 205, 0.92);
+  cursor: not-allowed;
+}
+
+.month-grid button.selected {
+  outline: 3px solid rgba(255, 255, 255, 0.72);
+}
+
+.available-dot {
+  background: #3ce28b;
+  box-shadow: 0 0 0 4px rgba(60, 226, 139, 0.16);
+}
+
+.booked-dot {
+  background: #ff6262;
+  box-shadow: 0 0 0 4px rgba(255, 98, 98, 0.16);
+}
+
+.calendar-slots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.calendar-slots button {
+  display: grid;
+  gap: 5px;
+  min-height: 92px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(200, 231, 255, 0.24);
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-weight: 800;
+}
+
+.calendar-slots button.available {
+  border-color: rgba(60, 226, 139, 0.58);
+  background: linear-gradient(135deg, rgba(40, 188, 112, 0.4), rgba(255, 255, 255, 0.12));
+}
+
+.calendar-slots button.booked {
+  border-color: rgba(255, 98, 98, 0.42);
+  background: linear-gradient(135deg, rgba(178, 43, 58, 0.42), rgba(255, 255, 255, 0.08));
+  cursor: pointer;
+  opacity: 0.72;
+}
+
+.calendar-slots button.selected {
+  background: #053f73;
+  box-shadow: 0 16px 28px rgba(0, 32, 78, 0.32);
+}
+
+.calendar-slots small,
+.calendar-slots span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.confirm-slot {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 16px;
+  border-radius: 15px;
+  background: #fff;
+  color: #064b9d;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.empty a {
+  display: inline-flex;
+  margin-top: 10px;
+  background: #053f73;
+  color: #fff;
+}
+
+.reviews-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+}
+
+.reviews-heading strong {
+  min-width: 72px;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 1.8rem;
+}
+
+.reviews-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.reviews-list article {
+  padding: 16px;
+  border: 1px solid rgba(200, 231, 255, 0.2);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(151, 215, 255, 0.2), transparent 38%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+}
+
+.reviews-list header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.reviews-list header strong,
+.reviews-list header small {
+  display: block;
+}
+
+.reviews-list header small,
+.reviews-list header span {
+  color: #bfe8ff;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.reviews-list p {
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.5;
+}
+
+.verified {
+  display: inline-flex;
+  margin-top: 8px;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .topbar,
+  .profile-hero {
+    display: grid;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reviews-list {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-slots {
+    grid-template-columns: 1fr;
+  }
+}

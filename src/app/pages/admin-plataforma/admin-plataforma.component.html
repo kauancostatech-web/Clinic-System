@@ -1,0 +1,38 @@
+<section class="admin-page">
+  <main class="admin-card" *ngIf="!empresas.length && !authService.temPerfil(['ADMIN_PLATAFORMA']); else painel">
+    <span>Administrador da plataforma</span>
+    <h1>Entrar</h1>
+    <form (ngSubmit)="entrar()">
+      <label>
+        E-mail
+        <input type="email" [(ngModel)]="email" name="email" required>
+      </label>
+      <label>
+        Senha
+        <input type="password" [(ngModel)]="senha" name="senha" required>
+      </label>
+      <button type="submit">Entrar no admin</button>
+    </form>
+    <p *ngIf="mensagem">{{ mensagem }}</p>
+  </main>
+
+  <ng-template #painel>
+    <main class="admin-card wide">
+      <a routerLink="/home">Voltar ao site</a>
+      <span>Dashboard admin</span>
+      <h1>Empresas cadastradas</h1>
+      <div class="empresa-list">
+        <article *ngFor="let empresa of empresas">
+          <div>
+            <strong>{{ empresa.nomeFantasia }}</strong>
+            <p>{{ empresa.cnpj }} · {{ empresa.email }}</p>
+          </div>
+          <span>{{ empresa.aprovada ? 'Aprovada' : 'Aguardando aprovação' }}</span>
+          <button type="button" (click)="alternarAprovacao(empresa)">
+            {{ empresa.aprovada ? 'Revogar aprovação' : 'Aprovar empresa' }}
+          </button>
+        </article>
+      </div>
+    </main>
+  </ng-template>
+</section>

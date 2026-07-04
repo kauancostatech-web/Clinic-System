@@ -1,0 +1,25 @@
+{
+    "files.exclude": {
+        "**/.angular": true,
+        "**/coverage": true,
+        "**/dist": true,
+        "**/node_modules": true
+    },
+    "files.watcherExclude": {
+        "**/.angular/**": true,
+        "**/.cache/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/coverage/**": true,
+        "**/dist/**": true,
+        "**/node_modules/**": true
+    },
+    "git.autofetch": false,
+    "search.exclude": {
+        "**/.angular": true,
+        "**/coverage": true,
+        "**/dist": true,
+        "**/node_modules": true
+    },
+    "typescript.disableAutomaticTypeAcquisition": true
+}

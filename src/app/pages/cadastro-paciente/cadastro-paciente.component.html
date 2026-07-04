@@ -1,0 +1,59 @@
+<section class="page">
+  <div class="card">
+    <div class="cabecalho">
+      <span>Clinic System</span>
+      <h1>Criar conta</h1>
+      <p>Salve sua consulta marcada, pagamento e cancelamento em um só lugar.</p>
+    </div>
+
+    <form class="formulario" (ngSubmit)="cadastrar()">
+      <label>
+        Nome completo
+        <input type="text" [(ngModel)]="nome" name="nome" required>
+      </label>
+
+      <label>
+        E-mail
+        <input type="email" [(ngModel)]="email" name="email" required>
+      </label>
+
+      <label>
+        Senha
+        <input type="password" [(ngModel)]="senha" name="senha" required>
+      </label>
+
+      <label>
+        CPF
+        <input type="text" [(ngModel)]="cpf" name="cpf" (input)="formatarCpf()" placeholder="000.000.000-00" required>
+      </label>
+
+      <label>
+        Telefone
+        <input type="text" [(ngModel)]="telefone" name="telefone" (input)="formatarTelefone()" placeholder="(00) 00000-0000" required>
+      </label>
+
+      <label>
+        Local de preferência
+        <select [(ngModel)]="localPreferido" name="localPreferido">
+          <option value="">Escolher depois</option>
+          <option *ngFor="let unidade of unidades" [value]="unidade.nome">{{ unidade.nome }}</option>
+        </select>
+      </label>
+
+      <label>
+        Especialidade de interesse
+        <select [(ngModel)]="especialidadePreferida" name="especialidadePreferida">
+          <option value="">Escolher depois</option>
+          <option *ngFor="let especialidade of especialidades" [value]="especialidade.nome">{{ especialidade.nome }}</option>
+        </select>
+      </label>
+
+      <div class="acoes">
+        <button type="submit" [disabled]="salvando">{{ salvando ? 'Criando conta...' : 'Criar conta' }}</button>
+        <a routerLink="/login-paciente">Já tenho conta</a>
+      </div>
+    </form>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </div>
+</section>

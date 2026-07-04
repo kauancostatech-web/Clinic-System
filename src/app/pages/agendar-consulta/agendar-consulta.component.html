@@ -1,0 +1,58 @@
+<section class="flow-page">
+  <main class="flow-card">
+    <a routerLink="/buscar-atendimento">Voltar para busca</a>
+    <span>Agendamento</span>
+    <h1>{{ profissional?.nome || 'Escolher profissional' }}</h1>
+    <p>{{ profissional?.descricao }}</p>
+
+    <label class="full">
+      Tipo de consulta
+      <select [(ngModel)]="servicoId" name="servicoId">
+        <option *ngFor="let servico of servicos" [ngValue]="servico.id">
+          {{ servico.nome }} - R$ {{ servico.valor.toFixed(2).replace('.', ',') }} - {{ servico.duracaoMinutos }} min
+        </option>
+      </select>
+    </label>
+
+    <section class="calendar-panel">
+      <div class="mini-heading">
+        <span>Calendário</span>
+        <strong>Escolha um horário disponível</strong>
+      </div>
+
+      <div class="calendar-legend">
+        <span><i class="available-dot"></i>Disponível</span>
+        <span><i class="booked-dot"></i>Já marcado</span>
+      </div>
+
+      <div class="slot-grid" *ngIf="agendas.length; else semAgenda">
+        <button
+          type="button"
+          *ngFor="let agenda of agendas"
+          [class.selected]="agenda.id === agendaId"
+          [class.available]="agenda.disponivel"
+          [class.booked]="!agenda.disponivel"
+          [attr.aria-disabled]="!agenda.disponivel"
+          (click)="selecionarAgenda(agenda)">
+          <small>{{ agenda.data }}</small>
+          <strong>{{ agenda.horario }}</strong>
+          <em *ngIf="agenda.disponivel">Chegue {{ horarioChegada(agenda.horario) }}</em>
+          <em *ngIf="!agenda.disponivel">Horário já marcado</em>
+        </button>
+      </div>
+
+      <ng-template #semAgenda>
+        <p class="mensagem">Este profissional ainda não tem horários abertos.</p>
+      </ng-template>
+    </section>
+
+    <section class="appointment-summary" *ngIf="servicoSelecionado && agendaSelecionada">
+      <strong>Total: R$ {{ servicoSelecionado.valor.toFixed(2).replace('.', ',') }}</strong>
+      <p>{{ servicoSelecionado.nome }} em {{ agendaSelecionada.data }} às {{ agendaSelecionada.horario }}. Chegue às {{ horarioChegada(agendaSelecionada.horario) }} para confirmar presença.</p>
+      <small>Pagamento disponível por Pix ou cartão de crédito.</small>
+    </section>
+
+    <button type="button" (click)="continuar()">Confirmar horário</button>
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </main>
+</section>

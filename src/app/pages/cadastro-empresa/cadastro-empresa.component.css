@@ -1,0 +1,28 @@
+@import '../cadastro-paciente/cadastro-paciente.component.css';
+
+textarea {
+  min-height: 92px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0a3563;
+  font: inherit;
+  resize: vertical;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,58 @@
+<section class="company-login">
+  <div class="login-stage" aria-hidden="true">
+    <span class="shape ring-top"></span>
+    <span class="shape ring-left"></span>
+    <span class="shape ring-bottom"></span>
+    <span class="shape tube-left"></span>
+    <span class="shape tube-left small"></span>
+    <span class="shape wave-right"></span>
+    <span class="shape wave-right second"></span>
+    <span class="shape pill-bottom"></span>
+  </div>
+
+  <main class="login-card">
+    <a routerLink="/login-empresa" class="brand">Clinic System</a>
+    <div class="cabecalho">
+      <h2>Acesse sua conta</h2>
+    </div>
+
+    <form class="formulario" (ngSubmit)="entrar()">
+      <label>
+        E-mail profissional
+        <input type="email" [(ngModel)]="email" name="email" autocomplete="email" placeholder="contato@clinica.com.br" required>
+      </label>
+
+      <label>
+        Senha
+        <input type="password" [(ngModel)]="senha" name="senha" autocomplete="current-password" placeholder="Digite sua senha" required>
+      </label>
+
+      <a href="#recuperar-senha" class="forgot">Esqueci minha senha?</a>
+
+      <button class="primary-button" type="submit" [disabled]="carregando">
+        {{ carregando ? 'Entrando...' : 'Entrar no sistema' }}
+      </button>
+
+      <div class="social-divider">ou continue com</div>
+
+      <div class="social-login">
+        <button type="button" aria-label="Entrar com Google">
+          <i class="bi bi-google"></i>
+        </button>
+        <button type="button" aria-label="Entrar com GitHub">
+          <i class="bi bi-github"></i>
+        </button>
+        <button type="button" aria-label="Entrar com Facebook">
+          <i class="bi bi-facebook"></i>
+        </button>
+      </div>
+
+      <p class="signup-text">
+        Ainda não tem conta?
+        <a routerLink="/cadastro-empresa">Cadastrar empresa</a>
+      </p>
+    </form>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </main>
+</section>
