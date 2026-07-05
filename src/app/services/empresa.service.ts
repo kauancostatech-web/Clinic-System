@@ -9,6 +9,7 @@ export interface Empresa {
   cnpj: string;
   telefone: string;
   email: string;
+  cep?: string;
   endereco: string;
   descricao: string;
   logo: string;

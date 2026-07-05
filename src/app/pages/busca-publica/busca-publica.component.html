@@ -60,9 +60,9 @@
 
     <form class="filters" aria-label="Filtros de busca">
       <label class="field field-search">
-        <span>Especialidade, consulta, médico ou local</span>
+        <span>Especialidade, consulta, médico, local ou CEP</span>
         <div class="control">
-          <input type="search" [(ngModel)]="termo" name="termo" placeholder="Ex.: Cardiologia, Pinheiros, Clínica Vida, Dra. Ana...">
+          <input type="search" [(ngModel)]="termo" name="termo" placeholder="Ex.: Cardiologia, 01310-100, Pinheiros, Clínica Vida...">
           <i class="bi bi-search"></i>
         </div>
       </label>
@@ -165,7 +165,7 @@
               <span class="tag">{{ medico.especialidade }}</span>
               <h2>{{ medico.nome }}</h2>
               <p *ngIf="medico.localAtendimento"><i class="bi bi-hospital"></i>{{ medico.localAtendimento }}</p>
-              <p><i class="bi bi-geo-alt"></i>{{ medico.bairro }}, {{ medico.cidade }}</p>
+              <p><i class="bi bi-geo-alt"></i>{{ medico.bairro }}, {{ medico.cidade }} <span *ngIf="medico.cep">· {{ medico.cep }}</span></p>
               <small><i class="bi bi-star-fill"></i>{{ medico.avaliacao || '4.8' }} avaliações</small>
             </div>
           </header>

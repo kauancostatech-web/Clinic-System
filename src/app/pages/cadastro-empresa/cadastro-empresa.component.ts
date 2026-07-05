@@ -19,6 +19,7 @@ export class CadastroEmpresaComponent {
   cnpj = '';
   telefone = '';
   email = '';
+  cep = '';
   endereco = '';
   descricao = '';
   adminNome = '';
@@ -41,6 +42,30 @@ export class CadastroEmpresaComponent {
 
   formatarTelefone() {
     this.telefone = this.validacaoService.formatarTelefone(this.telefone);
+  }
+
+  formatarCep() {
+    this.cep = this.validacaoService.formatarCep(this.cep);
+  }
+
+  consultarCep() {
+    this.formatarCep();
+    if (!this.validacaoService.validarCep(this.cep)) {
+      this.mensagem = 'Informe um CEP com 8 números para buscar o endereço.';
+      return;
+    }
+
+    this.consultando = true;
+    this.validacaoService.consultarCep(this.cep).subscribe((dados) => {
+      if (dados) {
+        this.cep = dados.cep;
+        this.endereco = dados.enderecoCompleto;
+        this.mensagem = 'Endereço preenchido pelo CEP. Complete número e complemento se necessário.';
+      } else {
+        this.mensagem = 'Não foi possível encontrar esse CEP. Você pode preencher o endereço manualmente.';
+      }
+      this.consultando = false;
+    });
   }
 
   consultarCnpj() {
@@ -92,6 +117,7 @@ export class CadastroEmpresaComponent {
         cnpj: this.cnpj,
         telefone: this.telefone,
         email: this.email.trim(),
+        cep: this.cep,
         endereco: this.endereco.trim(),
         descricao: this.descricao.trim() || 'Empresa de saúde cadastrada na plataforma.',
         logo: '',

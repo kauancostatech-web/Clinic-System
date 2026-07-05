@@ -238,6 +238,8 @@
         <label>CNPJ<input [(ngModel)]="empresaForm.cnpj" name="empresaCnpj"></label>
         <label>Telefone<input [(ngModel)]="empresaForm.telefone" name="empresaTelefone"></label>
         <label>E-mail<input [(ngModel)]="empresaForm.email" name="empresaEmail"></label>
+        <label>CEP<input [(ngModel)]="empresaForm.cep" name="empresaCep" (input)="formatarCepEmpresa()" (blur)="consultarCepEmpresa()" placeholder="00000-000"></label>
+        <button type="button" (click)="consultarCepEmpresa()">Buscar endereço</button>
         <label class="full">Endereço<input [(ngModel)]="empresaForm.endereco" name="empresaEndereco"></label>
         <label class="full">Descrição<textarea [(ngModel)]="empresaForm.descricao" name="empresaDescricao" rows="4"></textarea></label>
         <button type="submit">Salvar configurações</button>

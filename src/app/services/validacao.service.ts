@@ -12,6 +12,15 @@ export interface ConsultaCnpj {
   situacaoCadastral?: string;
 }
 
+export interface ConsultaCep {
+  cep: string;
+  logradouro: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  enderecoCompleto: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,6 +79,10 @@ export class ValidacaoService {
     return this.apenasNumeros(valor).slice(0, 8).replace(/(\d{5})(\d{1,3})$/, '$1-$2');
   }
 
+  validarCep(valor: string): boolean {
+    return this.apenasNumeros(valor).length === 8;
+  }
+
   validarTelefone(valor: string): boolean {
     const telefone = this.apenasNumeros(valor);
     return telefone.length === 10 || telefone.length === 11;
@@ -95,6 +108,36 @@ export class ValidacaoService {
         telefone: dados.ddd_telefone_1 ? this.formatarTelefone(dados.ddd_telefone_1) : '',
         situacaoCadastral: dados.descricao_situacao_cadastral
       })),
+      catchError(() => of(null))
+    );
+  }
+
+  consultarCep(cep: string): Observable<ConsultaCep | null> {
+    const normalizado = this.apenasNumeros(cep);
+    if (normalizado.length !== 8) {
+      return of(null);
+    }
+
+    return this.http.get<any>(`https://viacep.com.br/ws/${normalizado}/json/`).pipe(
+      map((dados) => {
+        if (dados?.erro) {
+          return null;
+        }
+
+        const logradouro = dados.logradouro || '';
+        const bairro = dados.bairro || '';
+        const cidade = dados.localidade || '';
+        const estado = dados.uf || '';
+
+        return {
+          cep: this.formatarCep(normalizado),
+          logradouro,
+          bairro,
+          cidade,
+          estado,
+          enderecoCompleto: [logradouro, bairro, cidade, estado].filter(Boolean).join(', ')
+        };
+      }),
       catchError(() => of(null))
     );
   }

@@ -88,6 +88,7 @@ export class BuscaPublicaComponent implements OnInit {
       medico.cidade,
       medico.bairro,
       medico.localAtendimento,
+      `${medico.endereco || ''} ${medico.cep || ''}`,
       medico.valorNumero
     ));
 
@@ -143,8 +144,8 @@ export class BuscaPublicaComponent implements OnInit {
     this.ordenacao = 'menor-preco';
   }
 
-  private combinaBusca(nome = '', especialidades = '', cidade = '', bairro = '', localAtendimento = '', valor?: number): boolean {
-    const texto = this.normalizar(`${nome} ${especialidades} ${cidade} ${bairro} ${localAtendimento}`);
+  private combinaBusca(nome = '', especialidades = '', cidade = '', bairro = '', localAtendimento = '', endereco = '', valor?: number): boolean {
+    const texto = this.normalizar(`${nome} ${especialidades} ${cidade} ${bairro} ${localAtendimento} ${endereco}`);
     const termoOk = !this.termo || texto.includes(this.normalizar(this.termo));
     const cidadeOk = !this.cidade || cidade === this.cidade;
     const regiaoOk = !this.regiao || this.bairroEstaNaRegiao(bairro, this.regiao);

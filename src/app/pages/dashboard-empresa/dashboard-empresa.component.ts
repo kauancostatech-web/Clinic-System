@@ -11,6 +11,7 @@ import { PacienteRegistro, PacienteService } from '../../services/paciente.servi
 import { Pagamento, PagamentoService, StatusPagamento } from '../../services/pagamento.service';
 import { Profissional, ProfissionalService } from '../../services/profissional.service';
 import { Servico, ServicoService } from '../../services/servico.service';
+import { ValidacaoService } from '../../services/validacao.service';
 
 interface Indicador {
   rotulo: string;
@@ -55,6 +56,7 @@ export class DashboardEmpresaComponent implements OnInit {
     private servicoService: ServicoService,
     private pacienteService: PacienteService,
     private agendaService: AgendaService,
+    private validacaoService: ValidacaoService,
     private router: Router
   ) {}
 
@@ -259,6 +261,29 @@ export class DashboardEmpresaComponent implements OnInit {
     });
   }
 
+  formatarCepEmpresa() {
+    this.empresaForm.cep = this.validacaoService.formatarCep(this.empresaForm.cep || '');
+  }
+
+  consultarCepEmpresa() {
+    const cep = this.empresaForm.cep || '';
+    if (!this.validacaoService.validarCep(cep)) {
+      this.mensagem = 'Informe um CEP com 8 números para buscar o endereço.';
+      return;
+    }
+
+    this.validacaoService.consultarCep(cep).subscribe((dados) => {
+      if (!dados) {
+        this.mensagem = 'Não foi possível encontrar esse CEP. Preencha o endereço manualmente.';
+        return;
+      }
+
+      this.empresaForm.cep = dados.cep;
+      this.empresaForm.endereco = dados.enderecoCompleto;
+      this.mensagem = 'Endereço preenchido pelo CEP.';
+    });
+  }
+
   alterarLogo(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const arquivo = input.files?.[0];
@@ -364,6 +389,6 @@ export class DashboardEmpresaComponent implements OnInit {
   }
 
   private novaEmpresa(): Empresa {
-    return { nomeFantasia: '', razaoSocial: '', cnpj: '', telefone: '', email: '', endereco: '', descricao: '', logo: '', ativo: true, aprovada: false, criadoEm: '' };
+    return { nomeFantasia: '', razaoSocial: '', cnpj: '', telefone: '', email: '', cep: '', endereco: '', descricao: '', logo: '', ativo: true, aprovada: false, criadoEm: '' };
   }
 }

@@ -37,6 +37,15 @@
       </label>
 
       <label>
+        CEP
+        <input type="text" [(ngModel)]="cep" name="cep" (input)="formatarCep()" (blur)="consultarCep()" placeholder="00000-000">
+      </label>
+
+      <button type="button" class="secondary" (click)="consultarCep()" [disabled]="consultando">
+        {{ consultando ? 'Buscando endereço...' : 'Buscar endereço pelo CEP' }}
+      </button>
+
+      <label>
         Endereço
         <input type="text" [(ngModel)]="endereco" name="endereco">
       </label>

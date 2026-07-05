@@ -23,6 +23,7 @@ export interface Medico {
   localAtendimento?: string;
   cidade?: string;
   bairro?: string;
+  cep?: string;
   endereco?: string;
   valorConsulta?: string;
   valorNumero?: number;
@@ -40,6 +41,7 @@ export interface Unidade {
   nome: string;
   cidade?: string;
   bairro?: string;
+  cep?: string;
   endereco?: string;
   valorConsulta?: string;
   assinatura?: string;
@@ -116,6 +118,7 @@ export class PortalApiService {
                 localAtendimento: empresa?.nomeFantasia,
                 cidade: this.cidadeDaEmpresa(empresa?.endereco),
                 bairro: empresa?.endereco?.split(',')[0] || empresa?.endereco,
+                cep: empresa?.cep,
                 endereco: empresa?.endereco,
                 valorConsulta: menorValor ? `A partir de R$ ${menorValor.toFixed(2).replace('.', ',')}` : 'Valor a confirmar',
                 valorNumero: menorValor,
@@ -148,6 +151,7 @@ export class PortalApiService {
               nome: empresa.nomeFantasia,
               cidade: this.cidadeDaEmpresa(empresa.endereco),
               bairro: empresa.endereco?.split(',')[0] || empresa.endereco,
+              cep: empresa.cep,
               endereco: empresa.endereco,
               valorConsulta: valores.length ? `A partir de R$ ${Math.min(...valores).toFixed(2).replace('.', ',')}` : 'Valor a confirmar',
               assinatura: 'Planos e pagamentos definidos pelo local de atendimento',
