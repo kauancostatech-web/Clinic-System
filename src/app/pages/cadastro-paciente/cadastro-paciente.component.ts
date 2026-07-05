@@ -56,7 +56,7 @@ export class CadastroPacienteComponent implements OnInit {
     }
 
     if (!this.validacaoService.validarCpf(this.cpf)) {
-      this.mensagem = 'Informe um CPF válido. A validação é local e não consulta situação cadastral.';
+      this.mensagem = 'Informe um CPF com 11 números para continuar.';
       return;
     }
 

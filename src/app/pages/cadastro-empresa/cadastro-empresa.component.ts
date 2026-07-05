@@ -46,7 +46,7 @@ export class CadastroEmpresaComponent {
   consultarCnpj() {
     this.formatarCnpj();
     if (!this.validacaoService.validarCnpj(this.cnpj)) {
-      this.mensagem = 'Informe um CNPJ com formato válido para consultar os dados públicos.';
+      this.mensagem = 'Informe um CNPJ com 14 números para consultar os dados públicos.';
       return;
     }
 
@@ -74,7 +74,7 @@ export class CadastroEmpresaComponent {
     }
 
     if (!this.validacaoService.validarCnpj(this.cnpj) || !this.validacaoService.validarEmail(this.email) || !this.validacaoService.validarEmail(this.adminEmail)) {
-      this.mensagem = 'Revise CNPJ e e-mails antes de continuar.';
+      this.mensagem = 'Revise CNPJ e e-mails antes de continuar. O CNPJ precisa ter 14 números.';
       return;
     }
 

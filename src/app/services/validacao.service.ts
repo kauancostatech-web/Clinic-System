@@ -38,13 +38,7 @@ export class ValidacaoService {
       return false;
     }
 
-    const calcularDigito = (base: string, pesoInicial: number) => {
-      const soma = base.split('').reduce((total, numero, index) => total + Number(numero) * (pesoInicial - index), 0);
-      const resto = (soma * 10) % 11;
-      return resto === 10 ? 0 : resto;
-    };
-
-    return calcularDigito(cpf.slice(0, 9), 10) === Number(cpf[9]) && calcularDigito(cpf.slice(0, 10), 11) === Number(cpf[10]);
+    return true;
   }
 
   formatarCnpj(valor: string): string {
@@ -62,15 +56,7 @@ export class ValidacaoService {
       return false;
     }
 
-    const calcularDigito = (base: string, pesos: number[]) => {
-      const soma = base.split('').reduce((total, numero, index) => total + Number(numero) * pesos[index], 0);
-      const resto = soma % 11;
-      return resto < 2 ? 0 : 11 - resto;
-    };
-
-    const primeiro = calcularDigito(cnpj.slice(0, 12), [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
-    const segundo = calcularDigito(cnpj.slice(0, 13), [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
-    return primeiro === Number(cnpj[12]) && segundo === Number(cnpj[13]);
+    return true;
   }
 
   formatarTelefone(valor: string): string {
@@ -115,11 +101,15 @@ export class ValidacaoService {
 
   verificarCpfDuplicado(cpf: string): Observable<boolean> {
     const documento = this.formatarCpf(cpf);
-    return this.http.get<any[]>(`${this.apiUrl}/pacientes?cpf=${documento}`).pipe(map((pacientes) => pacientes.length > 0));
+    return this.http.get<any[]>(`${this.apiUrl}/pacientes`).pipe(
+      map((pacientes) => pacientes.some((paciente) => this.apenasNumeros(paciente.cpf) === this.apenasNumeros(documento)))
+    );
   }
 
   verificarCnpjDuplicado(cnpj: string): Observable<boolean> {
     const documento = this.formatarCnpj(cnpj);
-    return this.http.get<any[]>(`${this.apiUrl}/empresas?cnpj=${documento}`).pipe(map((empresas) => empresas.length > 0));
+    return this.http.get<any[]>(`${this.apiUrl}/empresas`).pipe(
+      map((empresas) => empresas.some((empresa) => this.apenasNumeros(empresa.cnpj) === this.apenasNumeros(documento)))
+    );
   }
 }

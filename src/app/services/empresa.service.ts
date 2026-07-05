@@ -36,6 +36,6 @@ export class EmpresaService {
   }
 
   atualizar(empresa: Empresa): Observable<Empresa> {
-    return this.http.put<Empresa>(`${this.apiUrl}/${empresa.id}`, empresa);
+    return this.http.put<Empresa>(`${this.apiUrl}/${Number(empresa.id)}`, empresa);
   }
 }
