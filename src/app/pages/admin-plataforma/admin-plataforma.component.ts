@@ -16,6 +16,7 @@ export class AdminPlataformaComponent implements OnInit {
   email = '';
   senha = '';
   mensagem = '';
+  carregando = false;
   empresas: Empresa[] = [];
 
   constructor(public authService: AuthService, private empresaService: EmpresaService, private router: Router) {}
@@ -27,14 +28,25 @@ export class AdminPlataformaComponent implements OnInit {
   }
 
   entrar() {
-    this.authService.login(this.email.trim(), this.senha.trim(), 'ADMIN_PLATAFORMA').subscribe((usuario) => {
-      if (!usuario) {
-        this.mensagem = 'E-mail ou senha inválidos para administrador da plataforma.';
-        return;
-      }
+    this.carregando = true;
+    this.mensagem = '';
 
-      this.carregarEmpresas();
-      this.router.navigate(['/dashboard-admin']);
+    this.authService.login(this.email.trim(), this.senha.trim(), 'ADMIN_PLATAFORMA').subscribe({
+      next: (usuario) => {
+        if (!usuario) {
+          this.mensagem = 'E-mail ou senha inválidos para administrador da plataforma.';
+          this.carregando = false;
+          return;
+        }
+
+        this.carregarEmpresas();
+        this.router.navigate(['/dashboard-admin']);
+        this.carregando = false;
+      },
+      error: () => {
+        this.mensagem = 'Erro no login. Verifique se o backend está rodando.';
+        this.carregando = false;
+      }
     });
   }
 

@@ -43,12 +43,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, senha: string, perfil?: PerfilUsuario | 'paciente' | 'medico' | 'clinica' | 'admin'): Observable<Usuario | undefined> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios?email=${email}&senha=${senha}`).pipe(
+    const emailParam = encodeURIComponent(email);
+    const senhaParam = encodeURIComponent(senha);
+
+    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios?email=${emailParam}&senha=${senhaParam}`).pipe(
       map((usuarios) => {
         const perfilNormalizado = this.normalizarPerfil(perfil);
         const usuario = usuarios.find((item) => {
           const perfilUsuario = this.normalizarPerfil(item.perfil);
-          return !perfilNormalizado || perfilUsuario === perfilNormalizado;
+          const usuarioAtivo = item.ativo !== false;
+          return usuarioAtivo && (!perfilNormalizado || perfilUsuario === perfilNormalizado);
         });
         return perfil ? usuario : usuarios[0];
       }),

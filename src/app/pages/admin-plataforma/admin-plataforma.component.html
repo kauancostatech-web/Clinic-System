@@ -11,7 +11,9 @@
         Senha
         <input type="password" [(ngModel)]="senha" name="senha" required>
       </label>
-      <button type="submit">Entrar no admin</button>
+      <button type="submit" [disabled]="carregando">
+        {{ carregando ? 'Entrando...' : 'Entrar no admin' }}
+      </button>
     </form>
     <p *ngIf="mensagem">{{ mensagem }}</p>
   </main>
