@@ -43,18 +43,19 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, senha: string, perfil?: PerfilUsuario | 'paciente' | 'medico' | 'clinica' | 'admin'): Observable<Usuario | undefined> {
-    const emailParam = encodeURIComponent(email);
-    const senhaParam = encodeURIComponent(senha);
+    const emailNormalizado = email.trim().toLowerCase();
+    const senhaNormalizada = senha.trim();
 
-    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios?email=${emailParam}&senha=${senhaParam}`).pipe(
+    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`).pipe(
       map((usuarios) => {
         const perfilNormalizado = this.normalizarPerfil(perfil);
         const usuario = usuarios.find((item) => {
           const perfilUsuario = this.normalizarPerfil(item.perfil);
           const usuarioAtivo = item.ativo !== false;
-          return usuarioAtivo && (!perfilNormalizado || perfilUsuario === perfilNormalizado);
+          const credenciaisOk = item.email.trim().toLowerCase() === emailNormalizado && item.senha === senhaNormalizada;
+          return usuarioAtivo && credenciaisOk && (!perfilNormalizado || perfilUsuario === perfilNormalizado);
         });
-        return perfil ? usuario : usuarios[0];
+        return usuario;
       }),
       switchMap((usuario) => this.hidratarUsuario(usuario)),
       tap((usuario) => this.salvarUsuarioLocal(usuario))
