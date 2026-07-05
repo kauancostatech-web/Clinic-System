@@ -1,7 +1,7 @@
 <section class="admin-page">
-  <main class="admin-card" *ngIf="!empresas.length && !authService.temPerfil(['ADMIN_PLATAFORMA']); else painel">
+  <main class="login-card" *ngIf="!authService.temPerfil(['ADMIN_PLATAFORMA']); else painel">
     <span>Administrador da plataforma</span>
-    <h1>Entrar</h1>
+    <h1>Entrar no painel</h1>
     <form (ngSubmit)="entrar()">
       <label>
         E-mail
@@ -15,26 +15,86 @@
         {{ carregando ? 'Entrando...' : 'Entrar no admin' }}
       </button>
     </form>
-    <p *ngIf="mensagem">{{ mensagem }}</p>
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
   </main>
 
   <ng-template #painel>
-    <main class="admin-card wide">
-      <a routerLink="/home">Voltar ao site</a>
-      <span>Dashboard admin</span>
-      <h1>Empresas cadastradas</h1>
-      <div class="empresa-list">
-        <article *ngFor="let empresa of empresas">
-          <div>
-            <strong>{{ empresa.nomeFantasia }}</strong>
-            <p>{{ empresa.cnpj }} · {{ empresa.email }}</p>
-          </div>
-          <span>{{ empresa.aprovada ? 'Aprovada' : 'Aguardando aprovação' }}</span>
-          <button type="button" (click)="alternarAprovacao(empresa)">
-            {{ empresa.aprovada ? 'Revogar aprovação' : 'Aprovar empresa' }}
-          </button>
+    <main class="admin-shell">
+      <header class="admin-topbar">
+        <div>
+          <span>Clinic System</span>
+          <h1>Painel da plataforma</h1>
+          <p>Controle empresas cadastradas, aprovação, status e dados básicos do portal.</p>
+        </div>
+        <div class="admin-actions">
+          <a routerLink="/home">Ver site</a>
+          <button type="button" (click)="sair()">Sair</button>
+        </div>
+      </header>
+
+      <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+
+      <section class="metric-grid">
+        <article>
+          <span>Empresas</span>
+          <strong>{{ empresas.length }}</strong>
+          <small>Cadastradas no banco local</small>
         </article>
-      </div>
+        <article>
+          <span>Aprovadas</span>
+          <strong>{{ totalAprovadas }}</strong>
+          <small>Disponíveis para operação</small>
+        </article>
+        <article>
+          <span>Ativas</span>
+          <strong>{{ totalAtivas }}</strong>
+          <small>Podem acessar o portal</small>
+        </article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="panel">
+          <div class="panel-heading">
+            <span>Empresas</span>
+            <h2>Cadastros da plataforma</h2>
+          </div>
+
+          <div class="empresa-list">
+            <article *ngFor="let empresa of empresas">
+              <div>
+                <strong>{{ empresa.nomeFantasia }}</strong>
+                <p>{{ empresa.cnpj }} · {{ empresa.email }}</p>
+                <small>{{ empresa.aprovada ? 'Aprovada' : 'Aguardando aprovação' }} · {{ empresa.ativo ? 'Ativa' : 'Inativa' }}</small>
+              </div>
+              <button type="button" (click)="editarEmpresa(empresa)">Editar</button>
+              <button type="button" (click)="alternarAprovacao(empresa)">
+                {{ empresa.aprovada ? 'Revogar' : 'Aprovar' }}
+              </button>
+              <button type="button" (click)="alternarAtivo(empresa)">
+                {{ empresa.ativo ? 'Desativar' : 'Ativar' }}
+              </button>
+            </article>
+          </div>
+        </article>
+
+        <article class="panel" *ngIf="empresaSelecionada">
+          <div class="panel-heading">
+            <span>Edição</span>
+            <h2>{{ empresaSelecionada.nomeFantasia }}</h2>
+          </div>
+
+          <form class="form-grid" (ngSubmit)="salvarEmpresa()">
+            <label>Nome fantasia<input [(ngModel)]="empresaSelecionada.nomeFantasia" name="adminNome"></label>
+            <label>Razão social<input [(ngModel)]="empresaSelecionada.razaoSocial" name="adminRazao"></label>
+            <label>CNPJ<input [(ngModel)]="empresaSelecionada.cnpj" name="adminCnpj"></label>
+            <label>Telefone<input [(ngModel)]="empresaSelecionada.telefone" name="adminTelefone"></label>
+            <label>E-mail<input [(ngModel)]="empresaSelecionada.email" name="adminEmail"></label>
+            <label>Endereço<input [(ngModel)]="empresaSelecionada.endereco" name="adminEndereco"></label>
+            <label class="full">Descrição<textarea [(ngModel)]="empresaSelecionada.descricao" name="adminDescricao" rows="4"></textarea></label>
+            <button type="submit">Salvar empresa</button>
+          </form>
+        </article>
+      </section>
     </main>
   </ng-template>
 </section>

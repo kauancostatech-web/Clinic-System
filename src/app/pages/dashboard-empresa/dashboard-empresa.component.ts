@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { Agenda, AgendaService } from '../../services/agenda.service';
 import { Agendamento, AgendamentoService, StatusAgendamento } from '../../services/agendamento.service';
+import { Empresa, EmpresaService } from '../../services/empresa.service';
 import { PacienteRegistro, PacienteService } from '../../services/paciente.service';
-import { Pagamento, PagamentoService } from '../../services/pagamento.service';
+import { Pagamento, PagamentoService, StatusPagamento } from '../../services/pagamento.service';
 import { Profissional, ProfissionalService } from '../../services/profissional.service';
 import { Servico, ServicoService } from '../../services/servico.service';
 
@@ -16,16 +18,7 @@ interface Indicador {
   detalhe: string;
 }
 
-interface AtalhoOperacional {
-  titulo: string;
-  detalhe: string;
-  rota: string;
-}
-
-interface ItemResumo {
-  nome: string;
-  valor: string;
-}
+type SecaoEmpresa = 'dashboard' | 'profissionais' | 'servicos' | 'agenda' | 'pacientes' | 'pagamentos' | 'configuracoes';
 
 @Component({
   selector: 'app-dashboard-empresa',
@@ -36,62 +29,26 @@ interface ItemResumo {
 })
 export class DashboardEmpresaComponent implements OnInit {
   usuarioLogado?: Usuario;
+  empresa?: Empresa;
+  secaoAtiva: SecaoEmpresa = 'dashboard';
+  mensagem = '';
+
   consultas: Agendamento[] = [];
   pagamentos: Pagamento[] = [];
   profissionais: Profissional[] = [];
   servicosLista: Servico[] = [];
   pacientesLista: PacienteRegistro[] = [];
   agendas: Agenda[] = [];
-  mensagem = '';
-
   resumo: Indicador[] = [];
-  servicos: ItemResumo[] = [];
-  pacientes: ItemResumo[] = [];
-  financeiro: ItemResumo[] = [];
-  relatorios: ItemResumo[] = [];
 
-  atalhos: AtalhoOperacional[] = [
-    {
-      titulo: 'Cadastrar profissional',
-      detalhe: 'Inclua médicos, terapeutas e outros profissionais da empresa.',
-      rota: '/empresa/profissionais'
-    },
-    {
-      titulo: 'Criar serviço',
-      detalhe: 'Configure especialidades, duração e valor de consulta.',
-      rota: '/empresa/servicos'
-    },
-    {
-      titulo: 'Abrir agenda',
-      detalhe: 'Veja horários disponíveis, marcados e cancelados.',
-      rota: '/empresa/agenda'
-    },
-    {
-      titulo: 'Ver pacientes',
-      detalhe: 'Acompanhe pacientes com consultas ou pagamentos vinculados.',
-      rota: '/empresa/pacientes'
-    },
-    {
-      titulo: 'Conferir pagamentos',
-      detalhe: 'Revise pagamentos pagos, pendentes, cancelados e reembolsados.',
-      rota: '/empresa/pagamentos'
-    },
-    {
-      titulo: 'Configurar empresa',
-      detalhe: 'Atualize CNPJ, endereço, unidades e regras de cancelamento.',
-      rota: '/empresa/configuracoes'
-    }
-  ];
-
-  configuracoes: AtalhoOperacional[] = [
-    { titulo: 'Dados do CNPJ', detalhe: 'Nome, documento e canais de contato.', rota: '/empresa/perfil' },
-    { titulo: 'Unidades e endereços', detalhe: 'Locais de atendimento da empresa.', rota: '/empresa/configuracoes' },
-    { titulo: 'Usuários e permissões', detalhe: 'Acessos administrativos do painel.', rota: '/empresa/configuracoes' },
-    { titulo: 'Política de cancelamento', detalhe: 'Prazo de desistência e reembolso.', rota: '/empresa/configuracoes' }
-  ];
+  profissionalForm: Profissional = this.novoProfissional();
+  servicoForm: Servico = this.novoServico();
+  agendaForm: Agenda = this.novaAgenda();
+  empresaForm: Empresa = this.novaEmpresa();
 
   constructor(
     private authService: AuthService,
+    private empresaService: EmpresaService,
     private agendamentoService: AgendamentoService,
     private pagamentoService: PagamentoService,
     private profissionalService: ProfissionalService,
@@ -108,7 +65,33 @@ export class DashboardEmpresaComponent implements OnInit {
       return;
     }
 
+    this.definirSecaoPelaUrl(this.router.url);
+    this.router.events.pipe(filter((evento) => evento instanceof NavigationEnd)).subscribe((evento) => {
+      this.definirSecaoPelaUrl((evento as NavigationEnd).urlAfterRedirects);
+    });
     this.carregarDashboard();
+  }
+
+  get logoEmpresa(): string {
+    return this.empresa?.logo || '';
+  }
+
+  get iniciaisEmpresa(): string {
+    const nome = this.empresa?.nomeFantasia || 'Clinic System';
+    return nome.split(' ').slice(0, 2).map((parte) => parte[0]).join('').toUpperCase();
+  }
+
+  get pacientesDaEmpresa(): PacienteRegistro[] {
+    const ids = new Set(this.consultas.map((consulta) => Number(consulta.pacienteId)));
+    return this.pacientesLista.filter((paciente) => ids.has(Number(paciente.id)));
+  }
+
+  get agendasOrdenadas(): Agenda[] {
+    return [...this.agendas].sort((a, b) => `${a.data} ${a.horario}`.localeCompare(`${b.data} ${b.horario}`));
+  }
+
+  get pagamentosOrdenados(): Pagamento[] {
+    return [...this.pagamentos].sort((a, b) => b.criadoEm.localeCompare(a.criadoEm));
   }
 
   carregarDashboard() {
@@ -117,6 +100,11 @@ export class DashboardEmpresaComponent implements OnInit {
       this.mensagem = 'Sua conta não está vinculada a uma empresa.';
       return;
     }
+
+    this.empresaService.buscarPorId(empresaId).subscribe((empresa) => {
+      this.empresa = empresa;
+      this.empresaForm = { ...empresa };
+    });
 
     this.agendamentoService.listarPorEmpresa(empresaId).subscribe((agendamentos) => {
       this.consultas = agendamentos.sort((a, b) => `${a.data} ${a.horario}`.localeCompare(`${b.data} ${b.horario}`));
@@ -149,20 +137,141 @@ export class DashboardEmpresaComponent implements OnInit {
     });
   }
 
+  salvarProfissional() {
+    const empresaId = this.authService.empresaAtualId();
+    if (!empresaId) {
+      return;
+    }
+
+    const profissional: Profissional = { ...this.profissionalForm, empresaId, ativo: true };
+    const requisicao = profissional.id ? this.profissionalService.atualizar(profissional) : this.profissionalService.criar(profissional);
+    requisicao.subscribe({
+      next: () => {
+        this.mensagem = profissional.id ? 'Profissional atualizado.' : 'Profissional cadastrado.';
+        this.profissionalForm = this.novoProfissional();
+        this.carregarDashboard();
+      },
+      error: () => this.mensagem = 'Não foi possível salvar o profissional.'
+    });
+  }
+
+  editarProfissional(profissional: Profissional) {
+    this.profissionalForm = { ...profissional };
+    this.secaoAtiva = 'profissionais';
+  }
+
+  alternarProfissional(profissional: Profissional) {
+    this.profissionalService.atualizar({ ...profissional, ativo: !profissional.ativo }).subscribe(() => this.carregarDashboard());
+  }
+
+  salvarServico() {
+    const empresaId = this.authService.empresaAtualId();
+    if (!empresaId || !this.servicoForm.profissionalId) {
+      this.mensagem = 'Escolha um profissional para o serviço.';
+      return;
+    }
+
+    const servico: Servico = { ...this.servicoForm, empresaId, ativo: true, valor: Number(this.servicoForm.valor), duracaoMinutos: Number(this.servicoForm.duracaoMinutos), formasPagamento: ['PIX', 'CARTAO'] };
+    const requisicao = servico.id ? this.servicoService.atualizar(servico) : this.servicoService.criar(servico);
+    requisicao.subscribe({
+      next: () => {
+        this.mensagem = servico.id ? 'Serviço atualizado.' : 'Serviço cadastrado.';
+        this.servicoForm = this.novoServico();
+        this.carregarDashboard();
+      },
+      error: () => this.mensagem = 'Não foi possível salvar o serviço.'
+    });
+  }
+
+  editarServico(servico: Servico) {
+    this.servicoForm = { ...servico };
+    this.secaoAtiva = 'servicos';
+  }
+
+  alternarServico(servico: Servico) {
+    this.servicoService.atualizar({ ...servico, ativo: !servico.ativo }).subscribe(() => this.carregarDashboard());
+  }
+
+  salvarAgenda() {
+    const empresaId = this.authService.empresaAtualId();
+    if (!empresaId || !this.agendaForm.profissionalId || !this.agendaForm.data || !this.agendaForm.horario) {
+      this.mensagem = 'Preencha profissional, data e horário.';
+      return;
+    }
+
+    const agenda: Agenda = { ...this.agendaForm, empresaId, disponivel: this.agendaForm.disponivel !== false };
+    const requisicao = agenda.id ? this.agendaService.atualizar(agenda) : this.agendaService.criar(agenda);
+    requisicao.subscribe({
+      next: () => {
+        this.mensagem = agenda.id ? 'Horário atualizado.' : 'Horário aberto na agenda.';
+        this.agendaForm = this.novaAgenda();
+        this.carregarDashboard();
+      },
+      error: () => this.mensagem = 'Não foi possível salvar o horário.'
+    });
+  }
+
+  editarAgenda(agenda: Agenda) {
+    this.agendaForm = { ...agenda };
+    this.secaoAtiva = 'agenda';
+  }
+
+  alternarAgenda(agenda: Agenda) {
+    this.agendaService.atualizar({ ...agenda, disponivel: !agenda.disponivel }).subscribe(() => this.carregarDashboard());
+  }
+
   atualizarConsulta(consulta: Agendamento) {
     if (!consulta.id || consulta.status === 'CANCELADO' || consulta.status === 'REALIZADO') {
       return;
     }
 
     const status: StatusAgendamento = consulta.status === 'CONFIRMADO' ? 'REALIZADO' : 'CONFIRMADO';
-    const atualizada: Agendamento = { ...consulta, status };
-    this.agendamentoService.atualizar(atualizada).subscribe({
+    this.agendamentoService.atualizar({ ...consulta, status }).subscribe({
       next: () => {
         this.mensagem = status === 'REALIZADO' ? 'Consulta marcada como realizada.' : 'Consulta confirmada na agenda.';
         this.carregarDashboard();
       },
       error: () => this.mensagem = 'Não foi possível atualizar a consulta.'
     });
+  }
+
+  atualizarPagamento(pagamento: Pagamento, status: StatusPagamento) {
+    this.pagamentoService.atualizar({ ...pagamento, status }).subscribe({
+      next: () => {
+        this.mensagem = 'Pagamento atualizado.';
+        this.carregarDashboard();
+      },
+      error: () => this.mensagem = 'Não foi possível atualizar o pagamento.'
+    });
+  }
+
+  salvarEmpresa() {
+    if (!this.empresaForm.id) {
+      return;
+    }
+
+    this.empresaService.atualizar(this.empresaForm).subscribe({
+      next: (empresa) => {
+        this.empresa = empresa;
+        this.mensagem = 'Configurações da empresa atualizadas.';
+      },
+      error: () => this.mensagem = 'Não foi possível atualizar a empresa.'
+    });
+  }
+
+  alterarLogo(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    const arquivo = input.files?.[0];
+    if (!arquivo || !arquivo.type.startsWith('image/')) {
+      this.mensagem = 'Escolha uma imagem válida para a logo.';
+      return;
+    }
+
+    const leitor = new FileReader();
+    leitor.onload = () => {
+      this.empresaForm.logo = String(leitor.result);
+    };
+    leitor.readAsDataURL(arquivo);
   }
 
   nomePaciente(pacienteId: number): string {
@@ -184,11 +293,10 @@ export class DashboardEmpresaComponent implements OnInit {
       CANCELADO: 'Cancelada',
       REALIZADO: 'Realizada'
     };
-
     return mapa[status];
   }
 
-  classeStatus(status: StatusAgendamento): string {
+  classeStatus(status: string): string {
     return status.toLowerCase();
   }
 
@@ -196,11 +304,9 @@ export class DashboardEmpresaComponent implements OnInit {
     if (status === 'CONFIRMADO') {
       return 'Marcar realizada';
     }
-
     if (status === 'PENDENTE') {
       return 'Confirmar consulta';
     }
-
     return 'Sem ação';
   }
 
@@ -209,85 +315,55 @@ export class DashboardEmpresaComponent implements OnInit {
   }
 
   formatarMoeda(valor: number): string {
-    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
-
-  private recalcularDashboard() {
-    const pacientesAtivos = new Set(this.consultas.map((consulta) => consulta.pacienteId));
-    const confirmadas = this.totalPorStatus('CONFIRMADO');
-    const pendentes = this.totalPorStatus('PENDENTE');
-    const canceladas = this.totalPorStatus('CANCELADO');
-    const realizadas = this.totalPorStatus('REALIZADO');
-    const pagos = this.pagamentos.filter((pagamento) => pagamento.status === 'PAGO');
-    const pagamentosPendentes = this.pagamentos.filter((pagamento) => pagamento.status === 'PENDENTE');
-    const pagamentosCancelados = this.pagamentos.filter((pagamento) => pagamento.status === 'CANCELADO');
-    const reembolsados = this.pagamentos.filter((pagamento) => pagamento.status === 'REEMBOLSADO');
-    const recebido = pagos.reduce((total, pagamento) => total + pagamento.valor, 0);
-    const pendenteReceber = pagamentosPendentes.reduce((total, pagamento) => total + pagamento.valor, 0);
-    const slotsDisponiveis = this.agendas.filter((agenda) => agenda.disponivel).length;
-    const profissionaisAtivos = this.profissionais.filter((profissional) => profissional.ativo).length;
-    const servicosAtivos = this.servicosLista.filter((servico) => servico.ativo).length;
-    const servicoMaisAgendado = this.servicoMaisAgendado();
-
-    this.resumo = [
-      { rotulo: 'Pacientes ativos', valor: String(pacientesAtivos.size), detalhe: `${this.pacientesLista.length} pacientes cadastrados no sistema` },
-      { rotulo: 'Consultas na agenda', valor: String(this.consultas.length), detalhe: `${confirmadas} confirmadas, ${pendentes} pendentes` },
-      { rotulo: 'Receita recebida', valor: this.formatarMoeda(recebido), detalhe: `${this.formatarMoeda(pendenteReceber)} pendente de pagamento` },
-      { rotulo: 'Profissionais ativos', valor: String(profissionaisAtivos), detalhe: `${this.profissionais.length} profissionais cadastrados` },
-      { rotulo: 'Serviços ativos', valor: String(servicosAtivos), detalhe: `${slotsDisponiveis} horários disponíveis` },
-      { rotulo: 'Serviço mais buscado', valor: servicoMaisAgendado, detalhe: `${realizadas} consultas realizadas e ${canceladas} canceladas` }
-    ];
-
-    this.servicos = this.servicosLista
-      .slice(0, 6)
-      .map((servico) => ({
-        nome: servico.nome,
-        valor: `${this.formatarMoeda(servico.valor)} · ${servico.duracaoMinutos} min`
-      }));
-
-    this.pacientes = [
-      { nome: 'Pacientes com consulta', valor: String(pacientesAtivos.size) },
-      { nome: 'Consultas confirmadas', valor: String(confirmadas) },
-      { nome: 'Consultas pendentes', valor: String(pendentes) },
-      { nome: 'Cancelamentos registrados', valor: String(canceladas) }
-    ];
-
-    this.financeiro = [
-      { nome: 'Pagamentos pagos', valor: String(pagos.length) },
-      { nome: 'Pagamentos pendentes', valor: String(pagamentosPendentes.length) },
-      { nome: 'Pagamentos cancelados', valor: String(pagamentosCancelados.length) },
-      { nome: 'Reembolsos solicitados', valor: String(reembolsados.length) },
-      { nome: 'Total recebido', valor: this.formatarMoeda(recebido) }
-    ];
-
-    this.relatorios = [
-      { nome: 'Ocupação da agenda', valor: this.agendas.length ? `${Math.round(((this.agendas.length - slotsDisponiveis) / this.agendas.length) * 100)}%` : '0%' },
-      { nome: 'Ticket médio pago', valor: pagos.length ? this.formatarMoeda(recebido / pagos.length) : this.formatarMoeda(0) },
-      { nome: 'Serviço mais agendado', valor: servicoMaisAgendado },
-      { nome: 'Pendências operacionais', valor: String(pendentes + pagamentosPendentes.length) }
-    ];
-  }
-
-  private totalPorStatus(status: StatusAgendamento): number {
-    return this.consultas.filter((consulta) => consulta.status === status).length;
-  }
-
-  private servicoMaisAgendado(): string {
-    if (!this.consultas.length) {
-      return 'Sem agendamentos';
-    }
-
-    const totais = this.consultas.reduce<Record<number, number>>((mapa, consulta) => {
-      mapa[consulta.servicoId] = (mapa[consulta.servicoId] || 0) + 1;
-      return mapa;
-    }, {});
-
-    const [servicoId] = Object.entries(totais).sort((a, b) => b[1] - a[1])[0];
-    return this.nomeServico(Number(servicoId));
+    return Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
   sair() {
     this.authService.sair();
     this.router.navigate(['/']);
+  }
+
+  private definirSecaoPelaUrl(url: string) {
+    if (url.includes('/empresa/profissionais')) this.secaoAtiva = 'profissionais';
+    else if (url.includes('/empresa/servicos') || url.includes('/empresa/valores')) this.secaoAtiva = 'servicos';
+    else if (url.includes('/empresa/agenda')) this.secaoAtiva = 'agenda';
+    else if (url.includes('/empresa/pacientes')) this.secaoAtiva = 'pacientes';
+    else if (url.includes('/empresa/pagamentos')) this.secaoAtiva = 'pagamentos';
+    else if (url.includes('/empresa/configuracoes') || url.includes('/empresa/perfil')) this.secaoAtiva = 'configuracoes';
+    else this.secaoAtiva = 'dashboard';
+  }
+
+  private recalcularDashboard() {
+    const pacientesAtivos = new Set(this.consultas.map((consulta) => consulta.pacienteId));
+    const pagos = this.pagamentos.filter((pagamento) => pagamento.status === 'PAGO');
+    const pendentes = this.pagamentos.filter((pagamento) => pagamento.status === 'PENDENTE');
+    const recebido = pagos.reduce((total, pagamento) => total + pagamento.valor, 0);
+    const pendenteReceber = pendentes.reduce((total, pagamento) => total + pagamento.valor, 0);
+    const slotsDisponiveis = this.agendas.filter((agenda) => agenda.disponivel).length;
+
+    this.resumo = [
+      { rotulo: 'Profissionais', valor: String(this.profissionais.filter((item) => item.ativo).length), detalhe: `${this.profissionais.length} cadastrados` },
+      { rotulo: 'Serviços', valor: String(this.servicosLista.filter((item) => item.ativo).length), detalhe: 'Especialidades com valor e duração' },
+      { rotulo: 'Horários livres', valor: String(slotsDisponiveis), detalhe: `${this.agendas.length} horários no total` },
+      { rotulo: 'Pacientes', valor: String(pacientesAtivos.size), detalhe: 'Com consulta vinculada à empresa' },
+      { rotulo: 'Recebido', valor: this.formatarMoeda(recebido), detalhe: `${this.formatarMoeda(pendenteReceber)} pendente` },
+      { rotulo: 'Consultas', valor: String(this.consultas.length), detalhe: 'Confirmadas, pendentes ou canceladas' }
+    ];
+  }
+
+  private novoProfissional(): Profissional {
+    return { empresaId: 0, nome: '', especialidade: '', registro: '', descricao: '', foto: '', ativo: true };
+  }
+
+  private novoServico(): Servico {
+    return { empresaId: 0, profissionalId: 0, nome: '', descricao: '', valor: 0, duracaoMinutos: 30, formasPagamento: ['PIX', 'CARTAO'], ativo: true };
+  }
+
+  private novaAgenda(): Agenda {
+    return { empresaId: 0, profissionalId: 0, data: '', horario: '', disponivel: true };
+  }
+
+  private novaEmpresa(): Empresa {
+    return { nomeFantasia: '', razaoSocial: '', cnpj: '', telefone: '', email: '', endereco: '', descricao: '', logo: '', ativo: true, aprovada: false, criadoEm: '' };
   }
 }

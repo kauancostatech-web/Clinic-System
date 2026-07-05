@@ -18,6 +18,7 @@ export class AdminPlataformaComponent implements OnInit {
   mensagem = '';
   carregando = false;
   empresas: Empresa[] = [];
+  empresaSelecionada?: Empresa;
 
   constructor(public authService: AuthService, private empresaService: EmpresaService, private router: Router) {}
 
@@ -25,6 +26,14 @@ export class AdminPlataformaComponent implements OnInit {
     if (this.authService.temPerfil(['ADMIN_PLATAFORMA'])) {
       this.carregarEmpresas();
     }
+  }
+
+  get totalAprovadas(): number {
+    return this.empresas.filter((empresa) => empresa.aprovada).length;
+  }
+
+  get totalAtivas(): number {
+    return this.empresas.filter((empresa) => empresa.ativo).length;
   }
 
   entrar() {
@@ -51,10 +60,48 @@ export class AdminPlataformaComponent implements OnInit {
   }
 
   carregarEmpresas() {
-    this.empresaService.listar().subscribe((empresas) => this.empresas = empresas);
+    this.empresaService.listar().subscribe((empresas) => {
+      this.empresas = empresas;
+      if (this.empresaSelecionada?.id) {
+        this.empresaSelecionada = empresas.find((empresa) => empresa.id === this.empresaSelecionada?.id);
+      }
+    });
+  }
+
+  editarEmpresa(empresa: Empresa) {
+    this.empresaSelecionada = { ...empresa };
+  }
+
+  salvarEmpresa() {
+    if (!this.empresaSelecionada?.id) {
+      return;
+    }
+
+    this.empresaService.atualizar(this.empresaSelecionada).subscribe({
+      next: () => {
+        this.mensagem = 'Empresa atualizada.';
+        this.carregarEmpresas();
+      },
+      error: () => this.mensagem = 'Não foi possível atualizar a empresa.'
+    });
   }
 
   alternarAprovacao(empresa: Empresa) {
-    this.empresaService.atualizar({ ...empresa, aprovada: !empresa.aprovada }).subscribe(() => this.carregarEmpresas());
+    this.empresaService.atualizar({ ...empresa, aprovada: !empresa.aprovada }).subscribe(() => {
+      this.mensagem = empresa.aprovada ? 'Aprovação removida.' : 'Empresa aprovada.';
+      this.carregarEmpresas();
+    });
+  }
+
+  alternarAtivo(empresa: Empresa) {
+    this.empresaService.atualizar({ ...empresa, ativo: !empresa.ativo }).subscribe(() => {
+      this.mensagem = empresa.ativo ? 'Empresa desativada.' : 'Empresa reativada.';
+      this.carregarEmpresas();
+    });
+  }
+
+  sair() {
+    this.authService.sair();
+    this.router.navigate(['/']);
   }
 }

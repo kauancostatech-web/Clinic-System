@@ -1,72 +1,229 @@
 .admin-page {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
   padding: 24px;
-  background: radial-gradient(circle at 62% 36%, rgba(22, 153, 255, 0.56), transparent 24%), linear-gradient(135deg, #033c73 0%, #0874d8 48%, #00417d 100%);
-  color: #fff;
+  background: #edf5ff;
+  color: #132238;
 }
 
-.admin-card {
-  width: min(520px, 100%);
+.login-card,
+.admin-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.login-card {
+  display: grid;
+  gap: 16px;
+  max-width: 520px;
   padding: 28px;
-  border: 1px solid rgba(167, 214, 255, 0.32);
-  border-radius: 28px;
-  background: linear-gradient(135deg, rgba(65, 160, 245, 0.52), rgba(23, 129, 230, 0.46)), rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 34px 90px rgba(0, 42, 122, 0.42);
-  backdrop-filter: blur(22px);
+  border: 1px solid #d4e5f8;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(17, 69, 125, 0.1);
 }
 
-.wide {
-  width: min(980px, 100%);
-}
-
-a {
-  color: #fff;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-span {
-  color: rgba(255, 255, 255, 0.82);
+.login-card span,
+.admin-topbar span,
+.panel-heading span,
+.metric-grid span {
+  color: #075bb5;
+  font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-form,
-label,
-.empresa-list {
+.login-card h1,
+.admin-topbar h1,
+.panel-heading h2 {
+  margin: 6px 0 0;
+  letter-spacing: 0;
+}
+
+form {
   display: grid;
   gap: 12px;
 }
 
-input,
-button {
-  min-height: 46px;
-  border: 0;
-  border-radius: 14px;
-  padding: 10px 12px;
-  font: inherit;
+label {
+  display: grid;
+  gap: 7px;
+  color: #40536a;
+  font-weight: 800;
 }
 
-button {
-  background: #053f73;
+input,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #cfddeb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #15243a;
+  font: inherit;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button,
+.admin-actions a {
+  min-height: 42px;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #075fd7;
   color: #fff;
   cursor: pointer;
-  font-weight: 800;
+  font: inherit;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-topbar,
+.panel,
+.metric-grid article {
+  border: 1px solid #d4e5f8;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 42px rgba(17, 69, 125, 0.08);
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+}
+
+.admin-topbar p,
+.empresa-list p,
+.empresa-list small,
+.metric-grid small {
+  margin: 6px 0 0;
+  color: #5b6d84;
+  line-height: 1.45;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-actions button {
+  background: #05294f;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-grid article,
+.panel {
+  padding: 18px;
+}
+
+.metric-grid strong {
+  display: block;
+  margin-top: 8px;
+  color: #0f2542;
+  font-size: 1.7rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+  gap: 18px;
+}
+
+.empresa-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 .empresa-list article {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 10px;
   align-items: center;
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.14);
+  padding: 12px;
+  border: 1px solid #e0ebf7;
+  border-radius: 14px;
+  background: #f8fbff;
 }
 
-.empresa-list p {
-  margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.78);
+.empresa-list strong {
+  color: #112039;
+}
+
+.empresa-list button {
+  min-height: 38px;
+  padding-inline: 12px;
+}
+
+.empresa-list button:nth-of-type(2) {
+  background: #0f7b48;
+}
+
+.empresa-list button:nth-of-type(3) {
+  background: #8a4b00;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.mensagem {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #e8f4ff;
+  color: #075bb5;
+  font-weight: 900;
+}
+
+@media (max-width: 980px) {
+  .admin-grid,
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-topbar,
+  .empresa-list article {
+    display: grid;
+  }
+}
+
+@media (max-width: 620px) {
+  .admin-page {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }

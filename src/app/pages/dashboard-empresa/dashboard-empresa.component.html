@@ -1,41 +1,52 @@
 <section class="company-page">
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">+</div>
-      <div>
-        <strong>Clinic System</strong>
-        <span>Portal da empresa</span>
-      </div>
-    </div>
+    <a routerLink="/empresa/dashboard" class="brand">
+      <span class="brand-logo">
+        <img *ngIf="logoEmpresa; else marcaEmpresa" [src]="logoEmpresa" alt="Logo da empresa">
+        <ng-template #marcaEmpresa>{{ iniciaisEmpresa }}</ng-template>
+      </span>
+      <span>
+        <strong>{{ empresa?.nomeFantasia || 'Clinic System' }}</strong>
+        <small>Portal da empresa</small>
+      </span>
+    </a>
 
     <nav>
-      <a href="#dashboard">Dashboard</a>
-      <a routerLink="/empresa/profissionais">Profissionais</a>
-      <a routerLink="/empresa/servicos">Especialidades e serviços</a>
-      <a routerLink="/empresa/agenda">Agenda</a>
-      <a routerLink="/empresa/pacientes">Pacientes</a>
-      <a routerLink="/empresa/pagamentos">Pagamentos e faturas</a>
-      <a routerLink="/empresa/configuracoes">Configurações</a>
+      <a routerLink="/empresa/dashboard" [class.active]="secaoAtiva === 'dashboard'">Dashboard</a>
+      <a routerLink="/empresa/profissionais" [class.active]="secaoAtiva === 'profissionais'">Profissionais</a>
+      <a routerLink="/empresa/servicos" [class.active]="secaoAtiva === 'servicos'">Especialidades e serviços</a>
+      <a routerLink="/empresa/agenda" [class.active]="secaoAtiva === 'agenda'">Agenda</a>
+      <a routerLink="/empresa/pacientes" [class.active]="secaoAtiva === 'pacientes'">Pacientes</a>
+      <a routerLink="/empresa/pagamentos" [class.active]="secaoAtiva === 'pagamentos'">Pagamentos e faturas</a>
+      <a routerLink="/empresa/configuracoes" [class.active]="secaoAtiva === 'configuracoes'">Configurações</a>
     </nav>
 
     <button type="button" class="sair" (click)="sair()">Sair do painel</button>
   </aside>
 
   <main class="dashboard">
-    <header class="hero" id="dashboard">
+    <header class="topbar">
       <div>
-        <span>Área privada para CNPJ</span>
-        <h1>Dashboard administrativo</h1>
-        <p>Olá, {{ usuarioLogado?.nome }}. Acompanhe a operação da empresa, confirme consultas, revise pagamentos e mantenha serviços e profissionais atualizados.</p>
+        <span>{{ secaoAtiva === 'dashboard' ? 'Área privada' : 'Gestão da empresa' }}</span>
+        <h1>{{ empresa?.nomeFantasia || 'Dashboard administrativo' }}</h1>
+        <p>{{ empresa?.descricao || 'Gerencie profissionais, serviços, agenda, pacientes e financeiro.' }}</p>
       </div>
-      <div class="plan-card">
-        <small>Assinatura da plataforma</small>
-        <strong>Profissional</strong>
-        <p>Mensalidade ativa · controle de agenda, pacientes e financeiro.</p>
-      </div>
+
+      <a routerLink="/empresa/configuracoes" class="company-profile">
+        <span class="mini-logo">
+          <img *ngIf="logoEmpresa; else miniMarca" [src]="logoEmpresa" alt="Logo da empresa">
+          <ng-template #miniMarca>{{ iniciaisEmpresa }}</ng-template>
+        </span>
+        <span>
+          <strong>{{ usuarioLogado?.nome }}</strong>
+          <small>Configurações</small>
+        </span>
+      </a>
     </header>
 
-    <section class="metric-grid">
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+
+    <section class="metric-grid" *ngIf="secaoAtiva === 'dashboard'">
       <article *ngFor="let item of resumo">
         <span>{{ item.rotulo }}</span>
         <strong>{{ item.valor }}</strong>
@@ -43,113 +54,194 @@
       </article>
     </section>
 
-    <section class="content-grid">
-      <article class="panel" id="profissionais">
+    <section class="panel" *ngIf="secaoAtiva === 'dashboard'">
+      <div class="panel-heading">
+        <span>Operação</span>
+        <h2>Visão geral da clínica</h2>
+      </div>
+      <div class="quick-grid">
+        <a routerLink="/empresa/profissionais">Cadastrar profissional</a>
+        <a routerLink="/empresa/servicos">Cadastrar serviço</a>
+        <a routerLink="/empresa/agenda">Abrir horário</a>
+        <a routerLink="/empresa/pagamentos">Ver financeiro</a>
+      </div>
+    </section>
+
+    <section class="work-grid" *ngIf="secaoAtiva === 'profissionais'">
+      <article class="panel">
         <div class="panel-heading">
-          <span>Cadastros</span>
-          <h2>Médicos e profissionais</h2>
+          <span>Cadastro</span>
+          <h2>{{ profissionalForm.id ? 'Editar profissional' : 'Novo profissional' }}</h2>
         </div>
-        <div class="module-grid">
-          <a *ngFor="let atalho of atalhos" [routerLink]="atalho.rota">
-            <strong>{{ atalho.titulo }}</strong>
-            <span>{{ atalho.detalhe }}</span>
-          </a>
-        </div>
+        <form class="form-grid" (ngSubmit)="salvarProfissional()">
+          <label>Nome<input [(ngModel)]="profissionalForm.nome" name="profissionalNome" required></label>
+          <label>Especialidade<input [(ngModel)]="profissionalForm.especialidade" name="profissionalEspecialidade" required></label>
+          <label>Registro profissional<input [(ngModel)]="profissionalForm.registro" name="profissionalRegistro" placeholder="CRM, CRP, CRO..."></label>
+          <label>Foto por URL<input [(ngModel)]="profissionalForm.foto" name="profissionalFoto" placeholder="https://..."></label>
+          <label class="full">Descrição<textarea [(ngModel)]="profissionalForm.descricao" name="profissionalDescricao" rows="4"></textarea></label>
+          <button type="submit">{{ profissionalForm.id ? 'Salvar alteração' : 'Cadastrar profissional' }}</button>
+        </form>
       </article>
 
-      <article class="panel" id="servicos">
+      <article class="panel">
         <div class="panel-heading">
-          <span>Catálogo comercial</span>
-          <h2>Especialidades e serviços</h2>
+          <span>Equipe</span>
+          <h2>Profissionais cadastrados</h2>
         </div>
-        <div class="report-list">
-          <div *ngFor="let item of servicos">
-            <span>{{ item.nome }}</span>
-            <strong>{{ item.valor }}</strong>
-          </div>
-          <p class="empty-state" *ngIf="!servicos.length">Nenhum serviço cadastrado para esta empresa.</p>
+        <div class="list">
+          <article *ngFor="let profissional of profissionais">
+            <img *ngIf="profissional.foto" [src]="profissional.foto" [alt]="profissional.nome">
+            <div>
+              <strong>{{ profissional.nome }}</strong>
+              <p>{{ profissional.especialidade }} · {{ profissional.registro }}</p>
+              <small>{{ profissional.ativo ? 'Ativo' : 'Inativo' }}</small>
+            </div>
+            <button type="button" (click)="editarProfissional(profissional)">Editar</button>
+            <button type="button" (click)="alternarProfissional(profissional)">{{ profissional.ativo ? 'Desativar' : 'Ativar' }}</button>
+          </article>
         </div>
       </article>
     </section>
 
-    <section class="panel" id="agenda">
-      <div class="panel-heading">
-        <span>Agenda de consultas</span>
-        <h2>Consultas marcadas</h2>
-      </div>
+    <section class="work-grid" *ngIf="secaoAtiva === 'servicos'">
+      <article class="panel">
+        <div class="panel-heading">
+          <span>Serviços</span>
+          <h2>{{ servicoForm.id ? 'Editar serviço' : 'Novo serviço' }}</h2>
+        </div>
+        <form class="form-grid" (ngSubmit)="salvarServico()">
+          <label>Profissional
+            <select [(ngModel)]="servicoForm.profissionalId" name="servicoProfissional" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let profissional of profissionais" [ngValue]="profissional.id">{{ profissional.nome }}</option>
+            </select>
+          </label>
+          <label>Especialidade ou serviço<input [(ngModel)]="servicoForm.nome" name="servicoNome" required></label>
+          <label>Valor<input type="number" [(ngModel)]="servicoForm.valor" name="servicoValor" min="0" required></label>
+          <label>Duração em minutos<input type="number" [(ngModel)]="servicoForm.duracaoMinutos" name="servicoDuracao" min="10" required></label>
+          <label class="full">Descrição<textarea [(ngModel)]="servicoForm.descricao" name="servicoDescricao" rows="4"></textarea></label>
+          <button type="submit">{{ servicoForm.id ? 'Salvar alteração' : 'Cadastrar serviço' }}</button>
+        </form>
+      </article>
 
-      <div class="table-list" *ngIf="consultas.length; else vazio">
-        <article *ngFor="let consulta of consultas">
+      <article class="panel">
+        <div class="panel-heading">
+          <span>Catálogo</span>
+          <h2>Serviços cadastrados</h2>
+        </div>
+        <div class="list compact">
+          <article *ngFor="let servico of servicosLista">
+            <div>
+              <strong>{{ servico.nome }}</strong>
+              <p>{{ nomeProfissional(servico.profissionalId) }} · {{ formatarMoeda(servico.valor) }} · {{ servico.duracaoMinutos }} min</p>
+              <small>{{ servico.ativo ? 'Publicado' : 'Oculto' }}</small>
+            </div>
+            <button type="button" (click)="editarServico(servico)">Editar</button>
+            <button type="button" (click)="alternarServico(servico)">{{ servico.ativo ? 'Ocultar' : 'Publicar' }}</button>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <section class="work-grid" *ngIf="secaoAtiva === 'agenda'">
+      <article class="panel">
+        <div class="panel-heading">
+          <span>Agenda</span>
+          <h2>{{ agendaForm.id ? 'Editar horário' : 'Abrir horário' }}</h2>
+        </div>
+        <form class="form-grid" (ngSubmit)="salvarAgenda()">
+          <label>Profissional
+            <select [(ngModel)]="agendaForm.profissionalId" name="agendaProfissional" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let profissional of profissionais" [ngValue]="profissional.id">{{ profissional.nome }}</option>
+            </select>
+          </label>
+          <label>Data<input type="date" [(ngModel)]="agendaForm.data" name="agendaData" required></label>
+          <label>Horário<input type="time" [(ngModel)]="agendaForm.horario" name="agendaHorario" required></label>
+          <label>Status
+            <select [(ngModel)]="agendaForm.disponivel" name="agendaDisponivel">
+              <option [ngValue]="true">Disponível</option>
+              <option [ngValue]="false">Bloqueado</option>
+            </select>
+          </label>
+          <button type="submit">{{ agendaForm.id ? 'Salvar horário' : 'Adicionar à agenda' }}</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <span>Consultas</span>
+          <h2>Horários e agendamentos</h2>
+        </div>
+        <div class="list compact">
+          <article *ngFor="let agenda of agendasOrdenadas">
+            <div>
+              <strong>{{ agenda.data }} às {{ agenda.horario }}</strong>
+              <p>{{ nomeProfissional(agenda.profissionalId) }}</p>
+              <small>{{ agenda.disponivel ? 'Disponível para marcação' : 'Ocupado ou bloqueado' }}</small>
+            </div>
+            <button type="button" (click)="editarAgenda(agenda)">Editar</button>
+            <button type="button" (click)="alternarAgenda(agenda)">{{ agenda.disponivel ? 'Bloquear' : 'Liberar' }}</button>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" *ngIf="secaoAtiva === 'pacientes'">
+      <div class="panel-heading">
+        <span>Pacientes</span>
+        <h2>Pacientes vinculados à clínica</h2>
+      </div>
+      <div class="table-list">
+        <article *ngFor="let paciente of pacientesDaEmpresa">
           <div>
-            <strong>{{ nomePaciente(consulta.pacienteId) }}</strong>
-            <p>{{ nomeProfissional(consulta.profissionalId) }} · {{ nomeServico(consulta.servicoId) }}</p>
+            <strong>{{ paciente.nome }}</strong>
+            <p>{{ paciente.email }} · {{ paciente.telefone }}</p>
           </div>
-          <span>{{ consulta.data }} às {{ consulta.horario }}</span>
-          <strong>{{ formatarMoeda(consulta.valor) }}</strong>
-          <span class="status" [ngClass]="classeStatus(consulta.status)">{{ textoStatus(consulta.status) }}</span>
-          <button type="button" [disabled]="!podeAtualizar(consulta.status)" (click)="atualizarConsulta(consulta)">{{ acaoConsulta(consulta.status) }}</button>
+          <span>{{ paciente.ativo ? 'Ativo' : 'Inativo' }}</span>
         </article>
       </div>
-
-      <ng-template #vazio>
-        <p class="empty-state">Nenhuma consulta cadastrada para a sua clínica.</p>
-      </ng-template>
-
-      <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+      <p class="empty-state" *ngIf="!pacientesDaEmpresa.length">Nenhum paciente vinculado à empresa ainda.</p>
     </section>
 
-    <section class="content-grid">
-      <article class="panel" id="pacientes">
-        <div class="panel-heading">
-          <span>Relacionamento</span>
-          <h2>Pacientes ativos</h2>
-        </div>
-        <div class="report-list">
-          <div *ngFor="let item of pacientes">
-            <span>{{ item.nome }}</span>
-            <strong>{{ item.valor }}</strong>
-          </div>
-        </div>
-      </article>
-
-      <article class="panel" id="financeiro">
-        <div class="panel-heading">
-          <span>Financeiro</span>
-          <h2>Pagamentos, faturas e assinaturas</h2>
-        </div>
-        <div class="report-list">
-          <div *ngFor="let item of financeiro">
-            <span>{{ item.nome }}</span>
-            <strong>{{ item.valor }}</strong>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="panel" id="relatorios">
+    <section class="panel" *ngIf="secaoAtiva === 'pagamentos'">
       <div class="panel-heading">
-        <span>Inteligência operacional</span>
-        <h2>Resumo para decisão</h2>
+        <span>Financeiro</span>
+        <h2>Pagamentos e faturas</h2>
       </div>
-      <div class="report-list decision-grid">
-        <div *ngFor="let item of relatorios">
-          <span>{{ item.nome }}</span>
-          <strong>{{ item.valor }}</strong>
-        </div>
+      <div class="table-list">
+        <article *ngFor="let pagamento of pagamentosOrdenados">
+          <div>
+            <strong>{{ nomePaciente(pagamento.pacienteId) }}</strong>
+            <p>{{ pagamento.metodo }} · {{ pagamento.criadoEm }}</p>
+          </div>
+          <strong>{{ formatarMoeda(pagamento.valor) }}</strong>
+          <span class="status" [ngClass]="classeStatus(pagamento.status)">{{ pagamento.status }}</span>
+          <button type="button" (click)="atualizarPagamento(pagamento, 'PAGO')">Pago</button>
+          <button type="button" (click)="atualizarPagamento(pagamento, 'REEMBOLSADO')">Reembolso</button>
+        </article>
       </div>
+      <p class="empty-state" *ngIf="!pagamentosOrdenados.length">Nenhum pagamento registrado para esta empresa.</p>
     </section>
 
-    <section class="panel" id="configuracoes">
+    <section class="panel" *ngIf="secaoAtiva === 'configuracoes'">
       <div class="panel-heading">
-        <span>Empresa</span>
-        <h2>Configurações da clínica</h2>
+        <span>Configurações</span>
+        <h2>Dados da empresa</h2>
       </div>
-      <div class="settings-grid">
-        <a *ngFor="let item of configuracoes" [routerLink]="item.rota">
-          <strong>{{ item.titulo }}</strong>
-          <span>{{ item.detalhe }}</span>
-        </a>
-      </div>
+      <form class="form-grid config-form" (ngSubmit)="salvarEmpresa()">
+        <label>Logo da empresa
+          <input type="file" accept="image/*" (change)="alterarLogo($event)">
+        </label>
+        <label>Nome fantasia<input [(ngModel)]="empresaForm.nomeFantasia" name="empresaNome"></label>
+        <label>Razão social<input [(ngModel)]="empresaForm.razaoSocial" name="empresaRazao"></label>
+        <label>CNPJ<input [(ngModel)]="empresaForm.cnpj" name="empresaCnpj"></label>
+        <label>Telefone<input [(ngModel)]="empresaForm.telefone" name="empresaTelefone"></label>
+        <label>E-mail<input [(ngModel)]="empresaForm.email" name="empresaEmail"></label>
+        <label class="full">Endereço<input [(ngModel)]="empresaForm.endereco" name="empresaEndereco"></label>
+        <label class="full">Descrição<textarea [(ngModel)]="empresaForm.descricao" name="empresaDescricao" rows="4"></textarea></label>
+        <button type="submit">Salvar configurações</button>
+      </form>
     </section>
   </main>
 </section>
