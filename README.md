@@ -279,7 +279,7 @@ O desenvolvimento teve como objetivo aplicar conceitos de desenvolvimento web na
 
 **Kauan Costa**
 
-Estudante de Análise e Desenvolvimento de Sistemas.
+
 
 📧 **E-mail:** [kauancosta.tech@gmail.com](mailto:kauancosta.tech@gmail.com)
 
